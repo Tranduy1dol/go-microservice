@@ -1,2 +1,12 @@
+github.com/BurntSushi/toml v1.5.0 h1:W5quZX/G/csjUnuI8SUYlsHs9M38FC7znL0lIO+DvMg=
+github.com/BurntSushi/toml v1.5.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
+github.com/direnv/direnv v2.20.1+incompatible h1:ieQddw35hwlfB08H9P6XHZ1ZB9F9YwqjTnT5M6y2/4w=
+github.com/direnv/direnv v2.20.1+incompatible/go.mod h1:wLAFZyTNB05hBiMoY/Al2KQk69gTvw+CJ5aJfklF1F4=
+github.com/direnv/go-dotenv v0.0.0-20240228124046-4d7e6004a1a8 h1:vM+8YWwqEgFpB6YYJAHqLYkJmf0TLixjd3R8Xmp1KDY=
+github.com/direnv/go-dotenv v0.0.0-20240228124046-4d7e6004a1a8/go.mod h1:K5R9ofHu1mQRwNWMZgDnr0s1Ca1nkvz9r09NN/U2UyM=
 github.com/go-chi/chi/v5 v5.2.1 h1:KOIHODQj58PmL80G2Eak4WdvUzjSJSm0vG72crDCqb8=
 github.com/go-chi/chi/v5 v5.2.1/go.mod h1:L2yAIGWB3H+phAw1NxKwWM+7eUH/lU8pOMm5hHcoops=
+github.com/golang-migrate/migrate v3.5.4+incompatible h1:R7OzwvCJTCgwapPCiX6DyBiu2czIUMDCB118gFTKTUA=
+github.com/golang-migrate/migrate v3.5.4+incompatible/go.mod h1:IsVUlFN5puWOmXrqjgGUfIRIbU7mr8oNBE2tyERd9Wk=
+github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
+github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
