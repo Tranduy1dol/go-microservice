@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	ID        int    `json:"id"`
+	ID        int64  `json:"id"`
 	Username  string `json:"username"`
 	Email     string `json:"email"`
 	Password  string `json:"-"`
@@ -19,9 +19,12 @@ type UserStorage struct {
 
 func (s *UserStorage) Create(ctx context.Context, user *User) error {
 	query := `
-		INSERT INTO users (user_name, email, password)
+		INSERT INTO users (username, email, password)
 		VALUES ($1, $2, $3) RETURNING id, created_at
 	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
 
 	err := s.db.QueryRowContext(
 		ctx,
