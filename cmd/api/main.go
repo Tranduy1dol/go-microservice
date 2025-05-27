@@ -9,7 +9,7 @@ import (
 
 func main() {
 	cfg := config{
-		addr: env.GetString("ADDR", ":8080"),
+		addr: env.GetString("ADDR", "localhost:8080"),
 		dbConfig: dbConfig{
 			addr:         env.GetString("DB_ADDR", "postgres://user:password@localhost/social?sslmode=disable"),
 			maxOpenConns: env.GetInt("DB_MAX_OPEN_CONNS", 30),

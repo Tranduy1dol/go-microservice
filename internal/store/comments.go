@@ -14,11 +14,11 @@ type Comment struct {
 	User      User   `json:"user"`
 }
 
-type CommentStore struct {
+type CommentStorage struct {
 	db *sql.DB
 }
 
-func (s *CommentStore) GetByPostId(ctx context.Context, postId int64) ([]Comment, error) {
+func (s *CommentStorage) GetByPostId(ctx context.Context, postId int64) ([]Comment, error) {
 	query := `
 		SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, users.username, users.id FROM comments c
 		JOIN users ON users.id = c.user_id
@@ -48,7 +48,7 @@ func (s *CommentStore) GetByPostId(ctx context.Context, postId int64) ([]Comment
 	return comments, nil
 }
 
-func (s *CommentStore) Create(ctx context.Context, comment *Comment) error {
+func (s *CommentStorage) Create(ctx context.Context, comment *Comment) error {
 	query := `
 		insert into comments (post_id, user_id, content)
 		values ($1, $2, $3)
