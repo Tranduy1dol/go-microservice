@@ -79,7 +79,6 @@ func Seed(store store.Storage) {
 			log.Printf("Error creating user: %v", err)
 			return
 		}
-		log.Printf("User created: %s", user.Username)
 	}
 
 	posts := generatePosts(100, users)
