@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"github.com/Tranduy1dol/go-microservice/docs"
 	"github.com/Tranduy1dol/go-microservice/internal/store"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"log"
 	"net/http"
 	"time"
@@ -42,6 +45,9 @@ func (app *application) mount() http.Handler {
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
 
+		docURL := fmt.Sprintf("http://%s/swagger/doc.json", app.config.addr)
+		r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(docURL)))
+
 		r.Route("/posts", func(r chi.Router) {
 			r.Post("/", app.createPostHandler)
 
@@ -77,6 +83,10 @@ func (app *application) mount() http.Handler {
 }
 
 func (app *application) run(mux http.Handler) error {
+	docs.SwaggerInfo.Version = app.config.version
+	docs.SwaggerInfo.Host = app.config.addr
+	docs.SwaggerInfo.BasePath = "/v1"
+
 	srv := &http.Server{
 		Addr:         app.config.addr,
 		Handler:      mux,

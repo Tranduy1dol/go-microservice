@@ -24,6 +24,18 @@ type updatePostPayload struct {
 	Content *string `json:"content" validate:"omitempty, max=1000"`
 }
 
+// CreatePost godoc
+//
+//	@Summary		Create a post
+//	@Description	Create a new post
+//	@Tags			posts
+//	@Accept			JSON
+//	@Produce		JSON
+//	@Param			payload	body	createPostPayload	true	"Post payload"
+//	@Success		201	{object}	store.Post
+//	@Failure		400	{object}	error
+//	@Failure		500	{object}	error
+//	@Router	/posts [post]
 func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request) {
 	var payload createPostPayload
 	if err := readJSON(w, r, &payload); err != nil {
@@ -54,6 +66,18 @@ func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// GetPost godoc
+//
+//	@Summary		Show a post
+//	@Description	Get post by ID
+//	@Tags			posts
+//	@Accept			json
+//	@Produce		json
+//	@Param			postID	path		int	true	"Post ID"
+//	@Success		201	{object}	store.Post
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/posts/{postID} [get]
 func (app *application) getPostHandler(w http.ResponseWriter, r *http.Request) {
 	post := getPostFromContext(r)
 
@@ -71,6 +95,18 @@ func (app *application) getPostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeletePost godoc
+//
+//	@Summary		Delete a post
+//	@Description	Delete post by ID
+//	@Tags			posts
+//	@Accept			json
+//	@Produce		json
+//	@Param			postID	path		int	true	"Post ID"
+//	@Success		204	{object}	nil
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/posts/{postID} [delete]
 func (app *application) deletePostHandler(w http.ResponseWriter, r *http.Request) {
 	idParam := chi.URLParam(r, "postID")
 	id, err := strconv.ParseInt(idParam, 10, 64)
@@ -93,6 +129,20 @@ func (app *application) deletePostHandler(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// UpdatePost godoc
+//
+//	@Summary		Update a post
+//	@Description	Update post by ID
+//	@Tags			posts
+//	@Accept			json
+//	@Produce		json
+//	@Param			postID	path		int	true	"Post ID"
+//	@Param			payload	body		updatePostPayload	true	"Update post payload"
+//	@Success		200	{object}	store.Post
+//	@Failure		400	{object}	error
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/posts/{postID} [patch]
 func (app *application) updatePostHandler(w http.ResponseWriter, r *http.Request) {
 	post := getPostFromContext(r)
 
