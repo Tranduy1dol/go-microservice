@@ -12,7 +12,7 @@ import (
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}	store.Post
+//	@Success		200	{array}		store.Post
 //	@Failure		400	{object}	error
 //	@Failure		500	{object}	error
 //	@Router			/users/feed [get]

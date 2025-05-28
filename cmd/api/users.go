@@ -18,16 +18,16 @@ const userCtx userKey = "user"
 
 // GetUser godoc
 //
-//	@Summary	Show a user
+//	@Summary		Show a user
 //	@Description	Get user by ID
-//	@Tags	users
-//	@Accept	JSON
-//	@Produce	JSON
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
 //	@Param			userID	path		int	true	"User ID"
-//	@Success		200	{object}	store.User
-//	@Failure		400	{object}	error
-//	@Failure		404	{object}	error
-//	@Failure		500	{object}	error
+//	@Success		200		{object}	store.User
+//	@Failure		400		{object}	error
+//	@Failure		404		{object}	error
+//	@Failure		500		{object}	error
 //	@Router			/users/{userID} [get]
 func (app *application) getUserHandler(w http.ResponseWriter, r *http.Request) {
 	user := getUserFromContext(r.Context())
@@ -41,13 +41,13 @@ func (app *application) getUserHandler(w http.ResponseWriter, r *http.Request) {
 //	@Summary		Follow a user
 //	@Description	Follow another user by ID
 //	@Tags			users
-//	@Accept			JSON
-//	@Produce		JSON
-//	@Param			userID	path	int	true	"User ID"
-//	@Param			payload	body	followUser	true	"User to follow"
-//	@Success		204	{object}	nil
-//	@Failure		400	{object}	error
-//	@Failure		500	{object}	error
+//	@Accept			json
+//	@Produce		json
+//	@Param			userID	path		int			true	"User ID"
+//	@Param			payload	body		followUser	true	"User to follow"
+//	@Success		204		{object}	nil
+//	@Failure		400		{object}	error
+//	@Failure		500		{object}	error
 //	@Router			/users/{userID}/follow [put]
 func (app *application) followUserHandler(w http.ResponseWriter, r *http.Request) {
 	followerUser := getUserFromContext(r.Context())
@@ -78,11 +78,11 @@ func (app *application) followUserHandler(w http.ResponseWriter, r *http.Request
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@Param			userID	path		int	true	"User ID"
+//	@Param			userID	path		int			true	"User ID"
 //	@Param			payload	body		followUser	true	"User to unfollow"
-//	@Success		204	{object}	nil
-//	@Failure		400	{object}	error
-//	@Failure		500	{object}	error
+//	@Success		204		{object}	nil
+//	@Failure		400		{object}	error
+//	@Failure		500		{object}	error
 //	@Router			/users/{userID}/unfollow [put]
 func (app *application) unfollowUserHandler(w http.ResponseWriter, r *http.Request) {
 	unfollowUser := getUserFromContext(r.Context())
