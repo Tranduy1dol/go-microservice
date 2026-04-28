@@ -1,0 +1,12 @@
+package port
+
+import "context"
+
+type QuestionRepository interface {
+	GetByID(ctx context.Context, id string) (*domain.Question, error)
+	GetByJLPT(ctx context.Context, level int, section domain.TestSection, limit int) ([]*domain.Question, error)
+	GetRandom(ctx context.Context, count int) ([]*domain.Question, error)
+	Create(ctx context.Context, q *domain.Question) error
+	BulkCreate(ctx context.Context, questions []*domain.Question) (int64, error)
+	Delete(ctx context.Context, id string) error
+}
