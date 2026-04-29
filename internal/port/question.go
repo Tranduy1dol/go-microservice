@@ -1,6 +1,10 @@
 package port
 
-import "context"
+import (
+	"context"
+
+	"github.com/Tranduy1dol/learning-japanese/internal/domain"
+)
 
 type QuestionRepository interface {
 	GetByID(ctx context.Context, id string) (*domain.Question, error)

@@ -2,7 +2,8 @@ package port
 
 import (
 	"context"
-	"domain"
+
+	"github.com/Tranduy1dol/learning-japanese/internal/domain"
 )
 
 type DictionaryRepository interface {
