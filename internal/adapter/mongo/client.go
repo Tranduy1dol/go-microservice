@@ -8,18 +8,18 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func NewClient(ctx context.Context, uri, dbName string) (*mongo.Database, error) {
+func NewClient(ctx context.Context, uri, dbName string) (*mongo.Client, *mongo.Database, error) {
 	clientOpts := options.Client().ApplyURI(uri).SetConnectTimeout(10 * time.Second).SetServerSelectionTimeout(5 * time.Second)
 	client, err := mongo.Connect(ctx, clientOpts)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if err := client.Ping(ctx, nil); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return client.Database(dbName), nil
+	return client, client.Database(dbName), nil
 }
 
 func Close(client *mongo.Client) error {
