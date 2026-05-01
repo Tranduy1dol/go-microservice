@@ -38,6 +38,10 @@ func (s *LookupService) ListGrammarByJLPT(ctx context.Context, level, limit int)
 	return s.grammarRepo.GetByJLPT(ctx, level, limit)
 }
 
+func (s *LookupService) BrowseWordByJLPT(ctx context.Context, level, limit, offset int) ([]*domain.Word, int, error) {
+	return s.dictRepo.GetByJLPT(ctx, level, limit, offset)
+}
+
 func (s *LookupService) LookupAny(ctx context.Context, id string) (any, string, error) {
 	if word, err := s.dictRepo.GetByID(ctx, id); err == nil {
 		return word, "word", nil
