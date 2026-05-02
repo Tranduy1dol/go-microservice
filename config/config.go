@@ -15,26 +15,26 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Port string
-	Env  string
+	Port string `mapstructure:"port"`
+	Env  string `mapstructure:"env"`
 }
 
 type MongoConfig struct {
-	URI      string
-	Database string
+	URI      string `mapstructure:"uri"`
+	Database string `mapstructure:"database"`
 }
 
 type RedisConfig struct {
-	Addr     string
-	Password string
-	DB       int
+	Addr     string `mapstructure:"addr"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
 }
 
 type OAuthConfig struct {
-	GoogleClientID     string
-	GoogleClientSecret string
-	RedirectURL        string
-	JWTSecret          string
+	GoogleClientID     string `mapstructure:"google_client_id"`
+	GoogleClientSecret string `mapstructure:"google_client_secret"`
+	RedirectURL        string `mapstructure:"redirect_url"`
+	JWTSecret          string `mapstructure:"jwt_secret"`
 }
 
 func Load() (*Config, error) {
