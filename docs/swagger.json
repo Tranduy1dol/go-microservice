@@ -1,0 +1,960 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "A Japanese learning application API",
+        "title": "Learning Japanese API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "learning-japanese.onrender.com",
+    "basePath": "/api/v1",
+    "paths": {
+        "/admin/grammars": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Create a grammar entry",
+                "parameters": [
+                    {
+                        "description": "Grammar object",
+                        "name": "grammar",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Grammar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/grammars/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Delete a grammar entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Grammar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/paragraphs": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Create a paragraph",
+                "parameters": [
+                    {
+                        "description": "Paragraph object",
+                        "name": "paragraph",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paragraph"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/paragraphs/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Delete a paragraph",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Paragraph ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/questions": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Create a question",
+                "parameters": [
+                    {
+                        "description": "Question object",
+                        "name": "question",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Question"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/questions/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Delete a question",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Question ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/words": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Create a word",
+                "parameters": [
+                    {
+                        "description": "Word object",
+                        "name": "word",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Word"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/words/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Delete a word",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Word ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/grammar": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "grammar"
+                ],
+                "summary": "List grammar by JLPT level",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 5,
+                        "description": "JLPT Level",
+                        "name": "jlpt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 50,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/grammar/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "grammar"
+                ],
+                "summary": "Get grammar by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Grammar ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Grammar"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tests/generate": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tests"
+                ],
+                "summary": "Generate a new test",
+                "parameters": [
+                    {
+                        "description": "Request body containing jlpt level",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Test"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get current user profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/words/jlpt/{level}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "words"
+                ],
+                "summary": "Browse words by JLPT level",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "JLPT Level (1-5)",
+                        "name": "level",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 50,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/words/search": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "words"
+                ],
+                "summary": "Search words",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "q",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/words/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "words"
+                ],
+                "summary": "Get word by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Word ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Word"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Gloss": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Grammar": {
+            "type": "object",
+            "properties": {
+                "example": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.GrammarExample"
+                    }
+                },
+                "formation": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jlpt": {
+                    "type": "integer"
+                },
+                "meaning": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "pattern": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.GrammarExample": {
+            "type": "object",
+            "properties": {
+                "japanese": {
+                    "type": "string"
+                },
+                "reading": {
+                    "type": "string"
+                },
+                "translation": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Kanji": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Paragraph": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jlpt": {
+                    "type": "integer"
+                },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Question"
+                    }
+                },
+                "source": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Progress": {
+            "type": "object",
+            "properties": {
+                "cardsStudied": {
+                    "type": "integer"
+                },
+                "jlptlevel": {
+                    "type": "integer"
+                },
+                "lastStudyAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Question": {
+            "type": "object",
+            "properties": {
+                "choices": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "correctIndex": {
+                    "type": "integer"
+                },
+                "explanation": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jlpt": {
+                    "type": "integer"
+                },
+                "prompt": {
+                    "type": "string"
+                },
+                "section": {
+                    "$ref": "#/definitions/domain.TestSection"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "$ref": "#/definitions/domain.QuestionType"
+                }
+            }
+        },
+        "domain.QuestionType": {
+            "type": "string",
+            "enum": [
+                "multiple_choice",
+                "fill_in_blank",
+                "reorder"
+            ],
+            "x-enum-varnames": [
+                "MultipleChoice",
+                "FillInBlank",
+                "Reorder"
+            ]
+        },
+        "domain.Reading": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "priority": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Sense": {
+            "type": "object",
+            "properties": {
+                "gloss": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Gloss"
+                    }
+                },
+                "pos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "source": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Test": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jlpt": {
+                    "type": "integer"
+                },
+                "sections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.TestPart"
+                    }
+                },
+                "timeLimit": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.TestPart": {
+            "type": "object",
+            "properties": {
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Question"
+                    }
+                },
+                "section": {
+                    "$ref": "#/definitions/domain.TestSection"
+                }
+            }
+        },
+        "domain.TestSection": {
+            "type": "string",
+            "enum": [
+                "vocabulary",
+                "grammar",
+                "reading"
+            ],
+            "x-enum-varnames": [
+                "SectionVocab",
+                "SectionGrammar",
+                "SectionReading"
+            ]
+        },
+        "domain.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "googleID": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pictureURL": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "studyProgress": {
+                    "$ref": "#/definitions/domain.Progress"
+                }
+            }
+        },
+        "domain.Word": {
+            "type": "object",
+            "properties": {
+                "createdBy": {
+                    "type": "string"
+                },
+                "entSeq": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isCommon": {
+                    "type": "boolean"
+                },
+                "jlpt": {
+                    "type": "integer"
+                },
+                "kanji": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Kanji"
+                    }
+                },
+                "readings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Reading"
+                    }
+                },
+                "senses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Sense"
+                    }
+                },
+                "source": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Enter \"Bearer {token}\"",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

@@ -1,0 +1,611 @@
+basePath: /api/v1
+definitions:
+  domain.Gloss:
+    properties:
+      lang:
+        type: string
+      text:
+        type: string
+    type: object
+  domain.Grammar:
+    properties:
+      example:
+        items:
+          $ref: '#/definitions/domain.GrammarExample'
+        type: array
+      formation:
+        type: string
+      id:
+        type: string
+      jlpt:
+        type: integer
+      meaning:
+        type: string
+      notes:
+        type: string
+      pattern:
+        type: string
+      source:
+        type: string
+    type: object
+  domain.GrammarExample:
+    properties:
+      japanese:
+        type: string
+      reading:
+        type: string
+      translation:
+        type: string
+    type: object
+  domain.Kanji:
+    properties:
+      info:
+        type: string
+      priority:
+        type: integer
+      text:
+        type: string
+    type: object
+  domain.Paragraph:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      jlpt:
+        type: integer
+      questions:
+        items:
+          $ref: '#/definitions/domain.Question'
+        type: array
+      source:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
+  domain.Progress:
+    properties:
+      cardsStudied:
+        type: integer
+      jlptlevel:
+        type: integer
+      lastStudyAt:
+        type: string
+    type: object
+  domain.Question:
+    properties:
+      choices:
+        items:
+          type: string
+        type: array
+      correctIndex:
+        type: integer
+      explanation:
+        type: string
+      id:
+        type: string
+      jlpt:
+        type: integer
+      prompt:
+        type: string
+      section:
+        $ref: '#/definitions/domain.TestSection'
+      source:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      type:
+        $ref: '#/definitions/domain.QuestionType'
+    type: object
+  domain.QuestionType:
+    enum:
+    - multiple_choice
+    - fill_in_blank
+    - reorder
+    type: string
+    x-enum-varnames:
+    - MultipleChoice
+    - FillInBlank
+    - Reorder
+  domain.Reading:
+    properties:
+      info:
+        items:
+          type: string
+        type: array
+      priority:
+        type: integer
+      status:
+        type: string
+      text:
+        type: string
+    type: object
+  domain.Sense:
+    properties:
+      gloss:
+        items:
+          $ref: '#/definitions/domain.Gloss'
+        type: array
+      pos:
+        items:
+          type: string
+        type: array
+      source:
+        type: string
+    type: object
+  domain.Test:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      jlpt:
+        type: integer
+      sections:
+        items:
+          $ref: '#/definitions/domain.TestPart'
+        type: array
+      timeLimit:
+        type: integer
+    type: object
+  domain.TestPart:
+    properties:
+      questions:
+        items:
+          $ref: '#/definitions/domain.Question'
+        type: array
+      section:
+        $ref: '#/definitions/domain.TestSection'
+    type: object
+  domain.TestSection:
+    enum:
+    - vocabulary
+    - grammar
+    - reading
+    type: string
+    x-enum-varnames:
+    - SectionVocab
+    - SectionGrammar
+    - SectionReading
+  domain.User:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      googleID:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      pictureURL:
+        type: string
+      role:
+        type: string
+      studyProgress:
+        $ref: '#/definitions/domain.Progress'
+    type: object
+  domain.Word:
+    properties:
+      createdBy:
+        type: string
+      entSeq:
+        type: string
+      id:
+        type: string
+      isCommon:
+        type: boolean
+      jlpt:
+        type: integer
+      kanji:
+        items:
+          $ref: '#/definitions/domain.Kanji'
+        type: array
+      readings:
+        items:
+          $ref: '#/definitions/domain.Reading'
+        type: array
+      senses:
+        items:
+          $ref: '#/definitions/domain.Sense'
+        type: array
+      source:
+        type: string
+    type: object
+host: learning-japanese.onrender.com
+info:
+  contact: {}
+  description: A Japanese learning application API
+  title: Learning Japanese API
+  version: "1.0"
+paths:
+  /admin/grammars:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Grammar object
+        in: body
+        name: grammar
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Grammar'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a grammar entry
+      tags:
+      - admin
+  /admin/grammars/{id}:
+    delete:
+      parameters:
+      - description: Grammar ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a grammar entry
+      tags:
+      - admin
+  /admin/paragraphs:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Paragraph object
+        in: body
+        name: paragraph
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Paragraph'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a paragraph
+      tags:
+      - admin
+  /admin/paragraphs/{id}:
+    delete:
+      parameters:
+      - description: Paragraph ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a paragraph
+      tags:
+      - admin
+  /admin/questions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Question object
+        in: body
+        name: question
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Question'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a question
+      tags:
+      - admin
+  /admin/questions/{id}:
+    delete:
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a question
+      tags:
+      - admin
+  /admin/words:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Word object
+        in: body
+        name: word
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Word'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a word
+      tags:
+      - admin
+  /admin/words/{id}:
+    delete:
+      parameters:
+      - description: Word ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a word
+      tags:
+      - admin
+  /grammar:
+    get:
+      parameters:
+      - default: 5
+        description: JLPT Level
+        in: query
+        name: jlpt
+        type: integer
+      - default: 50
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List grammar by JLPT level
+      tags:
+      - grammar
+  /grammar/{id}:
+    get:
+      parameters:
+      - description: Grammar ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Grammar'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get grammar by ID
+      tags:
+      - grammar
+  /tests/generate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request body containing jlpt level
+        in: body
+        name: req
+        required: true
+        schema:
+          additionalProperties:
+            type: integer
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Test'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Generate a new test
+      tags:
+      - tests
+  /users/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get current user profile
+      tags:
+      - users
+  /words/{id}:
+    get:
+      parameters:
+      - description: Word ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Word'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get word by ID
+      tags:
+      - words
+  /words/jlpt/{level}:
+    get:
+      parameters:
+      - description: JLPT Level (1-5)
+        in: path
+        name: level
+        required: true
+        type: integer
+      - default: 50
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Browse words by JLPT level
+      tags:
+      - words
+  /words/search:
+    get:
+      parameters:
+      - description: Search query
+        in: query
+        name: q
+        required: true
+        type: string
+      - default: 20
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Search words
+      tags:
+      - words
+securityDefinitions:
+  BearerAuth:
+    description: Enter "Bearer {token}"
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
