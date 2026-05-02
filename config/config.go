@@ -46,7 +46,7 @@ func Load() (*Config, error) {
 	viper.AddConfigPath("$HOME/.config/.learning-japanese")
 
 	viper.SetEnvPrefix("APP")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "__"))
 	viper.AutomaticEnv()
 
 	viper.SetDefault("server.port", "8080")
