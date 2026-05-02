@@ -8,7 +8,6 @@ import (
 	"github.com/Tranduy1dol/learning-japanese/config"
 	"github.com/Tranduy1dol/learning-japanese/internal/adapter/mongo"
 	"github.com/Tranduy1dol/learning-japanese/internal/auth"
-	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 )
 
 func main() {
@@ -28,13 +27,10 @@ func main() {
 	grammarRepo := mongo.NewGrammarRepository(db)
 	paragraphRepo := mongo.NewParagraphRepository(db)
 
-	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo)
-	testGenSvs := usecase.NewTestGreneratorService(questionRepo, paragraphRepo)
-
 	jwtSvc := auth.NewJWTService(cfg.OAuth.JWTSecret)
 	googleOAuthService := auth.NewGoogleOAuthService(cfg.OAuth, jwtSvc, userRepo)
 
-	router := api.SetupRouter(lookupSvc, testGenSvs, googleOAuthService, jwtSvc, userRepo)
+	router := api.SetupRouter(googleOAuthService, jwtSvc, userRepo, wordRepo, questionRepo, paragraphRepo, grammarRepo)
 
 	log.Printf("server starting on port %s", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {

@@ -10,11 +10,13 @@ import (
 )
 
 func SetupRouter(
-	lookupSvc *usecase.LookupService,
-	testGenSvc *usecase.TestGeneratorService,
 	authSvc *auth.GoogleOAuthService,
 	jwtSvc *auth.JWTService,
 	userRepo port.UserRepository,
+	wordRepo port.DictionaryRepository,
+	questionRepo port.QuestionRepository,
+	paragraphRepo port.ParagraphRepository,
+	grammarRepo port.GrammarRepository,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -33,10 +35,14 @@ func SetupRouter(
 			token, user, err := authSvc.HandleCallback(ctx, code)
 			if err != nil {
 				ctx.JSON(400, gin.H{"error": err.Error()})
+				return
 			}
 			ctx.JSON(200, gin.H{"token": token, "user": user})
 		})
 	}
+
+	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo)
+	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo)
 
 	v1 := r.Group("/api/v1")
 	v1.Use(middleware.AuthMiddleware(jwtSvc))
@@ -56,6 +62,20 @@ func SetupRouter(
 		v1.POST("/tests/generate", testHandler.GenerateTest)
 
 		v1.GET("/users/me", userHandler.GetMe)
+
+		admin := v1.Group("/admin")
+		admin.Use(middleware.AdminMiddleware())
+		{
+			adminHandler := handler.NewAdminHandler(wordRepo, questionRepo, paragraphRepo, grammarRepo)
+			admin.POST("/words", adminHandler.CreateWord)
+			admin.DELETE("/words/:id", adminHandler.DeleteWord)
+			admin.POST("/questions", adminHandler.CreateQuestion)
+			admin.DELETE("/questions/:id", adminHandler.DeleteQuestion)
+			admin.POST("/paragraphs", adminHandler.CreateParagraph)
+			admin.DELETE("/paragraphs/:id", adminHandler.DeleteParagraph)
+			admin.POST("/grammars", adminHandler.CreateGrammar)
+			admin.DELETE("/grammars/:id", adminHandler.DeleteGrammar)
+		}
 	}
 
 	return r
