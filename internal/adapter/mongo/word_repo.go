@@ -69,7 +69,7 @@ func (r *WordRepository) GetByKanji(ctx context.Context, kanji string) (*domain.
 }
 
 func (r *WordRepository) GetByReading(ctx context.Context, reading string) ([]*domain.Word, error) {
-	filter := bson.M{"readings.reading": reading}
+	filter := bson.M{"readings.text": reading}
 
 	cursor, err := r.collection.Find(ctx, filter)
 	if err != nil {
@@ -89,7 +89,7 @@ func (r *WordRepository) Search(ctx context.Context, query string, limit int) ([
 	filter := bson.M{
 		"$or": []bson.M{
 			{"kanji.text": bson.M{"$regex": query, "$options": "i"}},
-			{"readings.reading": bson.M{"$regex": query, "$options": "i"}},
+			{"readings.text": bson.M{"$regex": query, "$options": "i"}},
 		},
 	}
 

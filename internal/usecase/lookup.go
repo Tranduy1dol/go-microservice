@@ -24,7 +24,7 @@ func (s *LookupService) GetWord(ctx context.Context, id string) (*domain.Word, e
 }
 
 func (s *LookupService) SearchWord(ctx context.Context, query string, limit int) ([]*domain.Word, error) {
-	if limit <= 20 {
+	if limit <= 0 || limit > 20 {
 		limit = 20
 	}
 	return s.dictRepo.Search(ctx, query, limit)

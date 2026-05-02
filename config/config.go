@@ -27,7 +27,7 @@ type MongoConfig struct {
 type RedisConfig struct {
 	Addr     string
 	Password string
-	DB       string
+	DB       int
 }
 
 type OAuthConfig struct {

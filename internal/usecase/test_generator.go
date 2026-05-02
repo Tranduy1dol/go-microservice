@@ -15,7 +15,7 @@ type TestGeneratorService struct {
 	paragraphRepo port.ParagraphRepository
 }
 
-func NewTestGreneratorService(question port.QuestionRepository, paragraph port.ParagraphRepository) *TestGeneratorService {
+func NewTestGeneratorService(question port.QuestionRepository, paragraph port.ParagraphRepository) *TestGeneratorService {
 	return &TestGeneratorService{
 		questionRepo:  question,
 		paragraphRepo: paragraph,
@@ -71,9 +71,18 @@ func (s *TestGeneratorService) shuffleQuestions(qs []*domain.Question) {
 	})
 
 	for _, q := range qs {
+		correctAnswer := q.Choices[q.CorrectIndex]
+
 		r.Shuffle(len(q.Choices), func(i, j int) {
 			q.Choices[i], q.Choices[j] = q.Choices[j], q.Choices[i]
 		})
+
+		for i, c := range q.Choices {
+			if c == correctAnswer {
+				q.CorrectIndex = i
+				break
+			}
+		}
 	}
 }
 

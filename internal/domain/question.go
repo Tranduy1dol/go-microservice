@@ -3,9 +3,9 @@ package domain
 type QuestionType string
 
 const (
-	MultipleChoie QuestionType = "multiple_choice"
-	FillInBlank   QuestionType = "fill_in_blank"
-	Reorder       QuestionType = "reorder"
+	MultipleChoice QuestionType = "multiple_choice"
+	FillInBlank    QuestionType = "fill_in_blank"
+	Reorder        QuestionType = "reorder"
 )
 
 type Question struct {
@@ -13,7 +13,7 @@ type Question struct {
 	Type         QuestionType `bson:"type"`
 	Section      TestSection  `bson:"section"`
 	JLPT         int          `bson:"jlpt"`
-	Promt        string       `bson:"promt"`
+	Prompt       string       `bson:"prompt"`
 	Choices      []string     `bson:"choices"`
 	CorrectIndex int          `bson:"correct_index"`
 	Explanation  string       `bson:"explanation"`
