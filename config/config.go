@@ -15,8 +15,9 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Port string `mapstructure:"port"`
-	Env  string `mapstructure:"env"`
+	Port          string `mapstructure:"port"`
+	Env           string `mapstructure:"env"`
+	EnableSwagger bool   `mapstructure:"enable_swagger"`
 }
 
 type MongoConfig struct {
@@ -50,6 +51,7 @@ func Load() (*Config, error) {
 
 	viper.SetDefault("server.port", "8080")
 	viper.SetDefault("server.env", "development")
+	viper.SetDefault("server.enable_swagger", false)
 	viper.SetDefault("mongodb.uri", "mongodb://admin:secret@localhost:27017")
 	viper.SetDefault("mongodb.database", "learning-japanese")
 	viper.SetDefault("redis.addr", "localhost:6379")

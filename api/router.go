@@ -3,13 +3,17 @@ package api
 import (
 	"github.com/Tranduy1dol/learning-japanese/api/handler"
 	"github.com/Tranduy1dol/learning-japanese/api/middleware"
+	_ "github.com/Tranduy1dol/learning-japanese/docs"
 	"github.com/Tranduy1dol/learning-japanese/internal/auth"
 	"github.com/Tranduy1dol/learning-japanese/internal/port"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func SetupRouter(
+	enableSwagger bool,
 	authSvc *auth.GoogleOAuthService,
 	jwtSvc *auth.JWTService,
 	userRepo port.UserRepository,
@@ -23,6 +27,10 @@ func SetupRouter(
 	r.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"status": "ok"})
 	})
+
+	if enableSwagger {
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	authGroup := r.Group("/auth")
 	{

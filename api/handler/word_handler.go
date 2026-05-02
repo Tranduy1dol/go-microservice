@@ -16,6 +16,15 @@ func NewWordHandler(lookupSvc *usecase.LookupService) *WordHandler {
 	return &WordHandler{lookupSvc: lookupSvc}
 }
 
+// GetWord godoc
+// @Summary     Get word by ID
+// @Tags        words
+// @Produce     json
+// @Param       id path string true "Word ID"
+// @Success     200 {object} domain.Word
+// @Failure     404 {object} map[string]string
+// @Security    BearerAuth
+// @Router      /words/{id} [get]
 func (h *WordHandler) GetWord(ctx *gin.Context) {
 	id := ctx.Param("id")
 	word, err := h.lookupSvc.GetWord(ctx.Request.Context(), id)
@@ -27,6 +36,15 @@ func (h *WordHandler) GetWord(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, word)
 }
 
+// SearchWords godoc
+// @Summary     Search words
+// @Tags        words
+// @Produce     json
+// @Param       q     query string true  "Search query"
+// @Param       limit query int    false "Limit" default(20)
+// @Success     200 {object} map[string]interface{}
+// @Security    BearerAuth
+// @Router      /words/search [get]
 func (h *WordHandler) SearchWords(ctx *gin.Context) {
 	query := ctx.Query("q")
 	if query == "" {
@@ -44,6 +62,16 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"words": words})
 }
 
+// BrowseWordsByJLPT godoc
+// @Summary     Browse words by JLPT level
+// @Tags        words
+// @Produce     json
+// @Param       level path int true "JLPT Level (1-5)"
+// @Param       limit query int false "Limit" default(50)
+// @Param       offset query int false "Offset" default(0)
+// @Success     200 {object} map[string]interface{}
+// @Security    BearerAuth
+// @Router      /words/jlpt/{level} [get]
 func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {
 	level, err := strconv.Atoi(ctx.Param("level"))
 	if err != nil || level < 1 || level > 5 {

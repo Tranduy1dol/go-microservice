@@ -15,6 +15,15 @@ func NewUserHandler(userRepo port.UserRepository) *UserHandler {
 	return &UserHandler{userRepo: userRepo}
 }
 
+// GetMe godoc
+// @Summary     Get current user profile
+// @Tags        users
+// @Produce     json
+// @Success     200 {object} domain.User
+// @Failure     401 {object} map[string]string
+// @Failure     404 {object} map[string]string
+// @Security    BearerAuth
+// @Router      /users/me [get]
 func (h *UserHandler) GetMe(ctx *gin.Context) {
 	userID := ctx.GetString("user_id")
 	if userID == "" {

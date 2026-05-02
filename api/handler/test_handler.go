@@ -15,6 +15,16 @@ func NewTestHandler(testGenSvc *usecase.TestGeneratorService) *TestHandler {
 	return &TestHandler{testGenSvc: testGenSvc}
 }
 
+// GenerateTest godoc
+// @Summary     Generate a new test
+// @Tags        tests
+// @Accept      json
+// @Produce     json
+// @Param       req body map[string]int true "Request body containing jlpt level"
+// @Success     200 {object} domain.Test
+// @Failure     400 {object} map[string]string
+// @Security    BearerAuth
+// @Router      /tests/generate [post]
 func (h *TestHandler) GenerateTest(ctx *gin.Context) {
 	var req struct {
 		JLPT int `json:"jlpt"`

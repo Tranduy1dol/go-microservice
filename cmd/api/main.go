@@ -10,6 +10,17 @@ import (
 	"github.com/Tranduy1dol/learning-japanese/internal/auth"
 )
 
+// @title           Learning Japanese API
+// @version         1.0
+// @description     A Japanese learning application API
+
+// @host            learning-japanese.onrender.com
+// @BasePath        /api/v1
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Enter "Bearer {token}"
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
@@ -30,7 +41,7 @@ func main() {
 	jwtSvc := auth.NewJWTService(cfg.OAuth.JWTSecret)
 	googleOAuthService := auth.NewGoogleOAuthService(cfg.OAuth, jwtSvc, userRepo)
 
-	router := api.SetupRouter(googleOAuthService, jwtSvc, userRepo, wordRepo, questionRepo, paragraphRepo, grammarRepo)
+	router := api.SetupRouter(cfg.Server.EnableSwagger, googleOAuthService, jwtSvc, userRepo, wordRepo, questionRepo, paragraphRepo, grammarRepo)
 
 	log.Printf("server starting on port %s", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {
