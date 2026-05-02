@@ -10,8 +10,9 @@ RUN CGO_ENABLED=0 go build -o /importer ./cmd/importer
 
 FROM alpine:3.21
 RUN apk add --no-cache ca-certificates tzdata
+WORKDIR /app
 COPY --from=builder /api /usr/local/bin/api
 COPY --from=builder /importer /usr/local/bin/importer
-COPY config/config.yaml /etc/learning-japanese/config.yaml
+COPY config/config.yaml ./config/config.yaml
 EXPOSE 8080
 CMD ["api"]
