@@ -39,7 +39,7 @@ func (h *WordHandler) GetWord(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, word)
+	ctx.JSON(http.StatusOK, dto.NewWordResponse(word))
 }
 
 // SearchWords godoc
@@ -64,7 +64,7 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"words": words})
+	ctx.JSON(http.StatusOK, dto.NewWordListResponse(words))
 }
 
 // BrowseWordsByJLPT godoc
@@ -97,7 +97,7 @@ func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"words":  words,
+		"words":  dto.NewWordListResponse(words),
 		"total":  total,
 		"limit":  page.Limit,
 		"offset": page.Offset,

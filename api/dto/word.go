@@ -33,6 +33,35 @@ type GlossDTO struct {
 	Lang string `json:"lang" binding:"required"`
 }
 
+type WordResponse struct {
+	ID       string            `json:"id"`
+	Kanji    []KanjiResponse   `json:"kanji"`
+	Readings []ReadingResponse `json:"readings"`
+	Sense    []SenseResponse   `json:"sense"`
+	JLPT     int               `json:"jlpt"`
+	IsCommon bool              `json:"is_common"`
+}
+
+type KanjiResponse struct {
+	Text string `json:"text"`
+	Info string `json:"info"`
+}
+
+type ReadingResponse struct {
+	Text string   `json:"text"`
+	Info []string `json:"info"`
+}
+
+type SenseResponse struct {
+	POS   []string        `json:"pos"`
+	Gloss []GlossResponse `json:"gloss"`
+}
+
+type GlossResponse struct {
+	Text string `json:"text"`
+	Lang string `json:"lang"`
+}
+
 func (r *CreateWordRequest) ToDomain() *domain.Word {
 	kanji := make([]domain.Kanji, len(r.Kanji))
 	for i, k := range r.Kanji {
@@ -73,4 +102,56 @@ func (r *CreateWordRequest) ToDomain() *domain.Word {
 		IsCommon: false,
 		Source:   "admin",
 	}
+}
+
+func NewWordResponse(w *domain.Word) WordResponse {
+	kanji := make([]KanjiResponse, len(w.Kanji))
+	for i, k := range w.Kanji {
+		kanji[i] = KanjiResponse{
+			Text: k.Text,
+			Info: k.Info,
+		}
+	}
+
+	readings := make([]ReadingResponse, len(w.Readings))
+	for i, r := range w.Readings {
+		readings[i] = ReadingResponse{
+			Text: r.Text,
+			Info: r.Info,
+		}
+	}
+
+	senses := make([]SenseResponse, len(w.Senses))
+	for i, s := range w.Senses {
+		gloss := make([]GlossResponse, len(s.Gloss))
+		for j, g := range s.Gloss {
+			gloss[j] = GlossResponse{
+				Text: g.Text,
+				Lang: g.Lang,
+			}
+		}
+
+		senses[i] = SenseResponse{
+			POS:   s.POS,
+			Gloss: gloss,
+		}
+	}
+
+	return WordResponse{
+		ID:       w.ID,
+		JLPT:     w.JLPT,
+		IsCommon: w.IsCommon,
+		Kanji:    kanji,
+		Readings: readings,
+		Sense:    senses,
+	}
+}
+
+func NewWordListResponse(ws []*domain.Word) []WordResponse {
+	res := make([]WordResponse, len(ws))
+	for i, w := range ws {
+		res[i] = NewWordResponse(w)
+	}
+
+	return res
 }

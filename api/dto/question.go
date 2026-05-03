@@ -13,6 +13,19 @@ type CreateQuestionRequest struct {
 	Tags         []string `json:"tags" binding:"omitempty,dive,required"`
 }
 
+type QuestionResponse struct {
+	ID      string   `json:"id"`
+	Type    string   `json:"type"`
+	Prompt  string   `json:"prompt"`
+	Choices []string `json:"choices"`
+}
+
+type QuestionWithAnswerResponse struct {
+	QuestionResponse
+	CorrectIndex int    `json:"correct_index"`
+	Explanation  string `json:"explanation"`
+}
+
 func (r *CreateQuestionRequest) ToDomain() *domain.Question {
 	return &domain.Question{
 		Type:         domain.QuestionType(r.Type),
@@ -24,5 +37,23 @@ func (r *CreateQuestionRequest) ToDomain() *domain.Question {
 		Explanation:  r.Explanation,
 		Tags:         r.Tags,
 		Source:       "admin",
+	}
+}
+
+func NewQuestionResponse(q *domain.Question) QuestionResponse {
+	return QuestionResponse{
+		ID:      q.ID,
+		Type:    string(q.Type),
+		Prompt:  q.Prompt,
+		Choices: q.Choices,
+	}
+}
+
+func NewQuestionWithAnswerResponse(q *domain.Question) QuestionWithAnswerResponse {
+	questionRes := NewQuestionResponse(q)
+	return QuestionWithAnswerResponse{
+		QuestionResponse: questionRes,
+		CorrectIndex:     q.CorrectIndex,
+		Explanation:      q.Explanation,
 	}
 }

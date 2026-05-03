@@ -38,7 +38,7 @@ func (h *GrammarHandler) GetGrammar(ctx *gin.Context) {
 		apperror.Response(ctx, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, grammar)
+	ctx.JSON(http.StatusOK, dto.NewGrammarResponse(grammar))
 }
 
 // ListGrammar godoc
@@ -69,5 +69,5 @@ func (h *GrammarHandler) ListGrammar(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"grammars": grammars})
+	ctx.JSON(http.StatusOK, dto.NewGrammarListResponse(grammars))
 }

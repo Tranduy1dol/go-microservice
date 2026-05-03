@@ -52,7 +52,7 @@ func (h *AdminHandler) CreateWord(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"word": word})
+	ctx.JSON(http.StatusCreated, dto.NewWordResponse(word))
 }
 
 // DeleteWord godoc
@@ -105,7 +105,7 @@ func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"question": question})
+	ctx.JSON(http.StatusCreated, dto.NewQuestionWithAnswerResponse(question))
 }
 
 // DeleteQuestion godoc
@@ -153,7 +153,7 @@ func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"paragraph": paragraph})
+	ctx.JSON(http.StatusCreated, dto.NewParagraphResponse(paragraph))
 }
 
 // DeleteParagraph godoc
@@ -201,7 +201,7 @@ func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"grammar": req})
+	ctx.JSON(http.StatusCreated, dto.NewGrammarResponse(grammar))
 }
 
 // DeleteGrammar godoc

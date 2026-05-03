@@ -17,6 +17,16 @@ type GrammarExampleDTO struct {
 	Translation string `json:"translation" binding:"required"`
 }
 
+type GrammarResponse struct {
+	ID        string                  `json:"id"`
+	Pattern   string                  `json:"pattern"`
+	Meaning   string                  `json:"meaning"`
+	Formation string                  `json:"formation"`
+	JLPT      int                     `json:"jlpt"`
+	Example   []domain.GrammarExample `json:"example"`
+	Notes     string                  `json:"notes"`
+}
+
 func (r *CreateGrammarRequest) ToDomain() *domain.Grammar {
 	examples := make([]domain.GrammarExample, len(r.Examples))
 	for i, e := range r.Examples {
@@ -36,4 +46,25 @@ func (r *CreateGrammarRequest) ToDomain() *domain.Grammar {
 		Notes:     r.Notes,
 		Source:    "admin",
 	}
+}
+
+func NewGrammarResponse(g *domain.Grammar) GrammarResponse {
+	return GrammarResponse{
+		ID:        g.ID,
+		Pattern:   g.Pattern,
+		Meaning:   g.Meaning,
+		Formation: g.Formation,
+		JLPT:      g.JLPT,
+		Notes:     g.Notes,
+		Example:   g.Example,
+	}
+}
+
+func NewGrammarListResponse(gs []*domain.Grammar) []GrammarResponse {
+	res := make([]GrammarResponse, len(gs))
+	for i, g := range gs {
+		res[i] = NewGrammarResponse(g)
+	}
+
+	return res
 }

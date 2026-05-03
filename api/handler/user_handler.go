@@ -39,5 +39,5 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, dto.NewUserResponse(user))
 }

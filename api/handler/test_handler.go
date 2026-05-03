@@ -39,5 +39,6 @@ func (h *TestHandler) GenerateTest(ctx *gin.Context) {
 		apperror.Response(ctx, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, test)
+
+	ctx.JSON(http.StatusOK, dto.NewTestResponse(test))
 }
