@@ -33,7 +33,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Grammar"
+                            "$ref": "#/definitions/dto.CreateGrammarRequest"
                         }
                     }
                 ],
@@ -41,8 +41,19 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/dto.GrammarResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -80,6 +91,24 @@
                                 "type": "boolean"
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
                     }
                 }
             }
@@ -108,7 +137,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Paragraph"
+                            "$ref": "#/definitions/dto.CreateParagraphRequest"
                         }
                     }
                 ],
@@ -116,8 +145,19 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/dto.ParagraphResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -155,6 +195,24 @@
                                 "type": "boolean"
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
                     }
                 }
             }
@@ -183,7 +241,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Question"
+                            "$ref": "#/definitions/dto.CreateQuestionRequest"
                         }
                     }
                 ],
@@ -191,8 +249,19 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/dto.QuestionWithAnswerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -230,6 +299,24 @@
                                 "type": "boolean"
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
                     }
                 }
             }
@@ -258,7 +345,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Word"
+                            "$ref": "#/definitions/dto.CreateWordRequest"
                         }
                     }
                 ],
@@ -266,8 +353,19 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/dto.WordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -304,6 +402,24 @@
                             "additionalProperties": {
                                 "type": "boolean"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -343,8 +459,22 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.GrammarResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -377,30 +507,36 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Grammar"
+                            "$ref": "#/definitions/dto.GrammarResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
             }
         },
-        "/tests/generate": {
+        "/tests/generate/{level}": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
-                ],
-                "consumes": [
-                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -411,32 +547,30 @@
                 "summary": "Generate a new test",
                 "parameters": [
                     {
-                        "description": "Request body containing jlpt level",
-                        "name": "req",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "integer"
-                            }
-                        }
+                        "type": "integer",
+                        "description": "JLPT Level",
+                        "name": "level",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Test"
+                            "$ref": "#/definitions/dto.TestResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -460,25 +594,25 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.User"
+                            "$ref": "#/definitions/dto.UserResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -528,6 +662,18 @@
                             "type": "object",
                             "additionalProperties": true
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
                     }
                 }
             }
@@ -566,8 +712,22 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.WordResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -600,16 +760,25 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Word"
+                            "$ref": "#/definitions/dto.WordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/apperror.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/apperror.AppError"
                         }
                     }
                 }
@@ -617,7 +786,217 @@
         }
     },
     "definitions": {
-        "domain.Gloss": {
+        "apperror.AppError": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.GrammarExample": {
+            "type": "object",
+            "properties": {
+                "japanese": {
+                    "type": "string"
+                },
+                "reading": {
+                    "type": "string"
+                },
+                "translation": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateGrammarRequest": {
+            "type": "object",
+            "required": [
+                "formation",
+                "jlpt",
+                "meaning",
+                "pattern"
+            ],
+            "properties": {
+                "examples": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GrammarExampleDTO"
+                    }
+                },
+                "formation": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "jlpt": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                },
+                "meaning": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "pattern": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "dto.CreateParagraphRequest": {
+            "type": "object",
+            "required": [
+                "content",
+                "jlpt",
+                "questions",
+                "tags",
+                "title"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "minLength": 10
+                },
+                "jlpt": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                },
+                "questions": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/dto.ParagraphQuestionDTO"
+                    }
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "dto.CreateQuestionRequest": {
+            "type": "object",
+            "required": [
+                "choices",
+                "jlpt",
+                "prompt",
+                "section",
+                "tags",
+                "type"
+            ],
+            "properties": {
+                "choices": {
+                    "type": "array",
+                    "maxItems": 6,
+                    "minItems": 2,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "correct_index": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "explanation": {
+                    "type": "string"
+                },
+                "jlpt": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                },
+                "prompt": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "section": {
+                    "type": "string",
+                    "enum": [
+                        "vocabulary",
+                        "grammar",
+                        "reading"
+                    ]
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "multiple_choice",
+                        "fill_in_blank",
+                        "reorder"
+                    ]
+                }
+            }
+        },
+        "dto.CreateWordRequest": {
+            "type": "object",
+            "required": [
+                "kanji",
+                "readings",
+                "senses"
+            ],
+            "properties": {
+                "jlpt": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                },
+                "kanji": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/dto.KanjiDTO"
+                    }
+                },
+                "readings": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/dto.ReadingDTO"
+                    }
+                },
+                "senses": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/dto.SenseDTO"
+                    }
+                }
+            }
+        },
+        "dto.GlossDTO": {
+            "type": "object",
+            "required": [
+                "lang",
+                "text"
+            ],
+            "properties": {
+                "lang": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GlossResponse": {
             "type": "object",
             "properties": {
                 "lang": {
@@ -628,7 +1007,26 @@
                 }
             }
         },
-        "domain.Grammar": {
+        "dto.GrammarExampleDTO": {
+            "type": "object",
+            "required": [
+                "japanese",
+                "reading",
+                "translation"
+            ],
+            "properties": {
+                "japanese": {
+                    "type": "string"
+                },
+                "reading": {
+                    "type": "string"
+                },
+                "translation": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GrammarResponse": {
             "type": "object",
             "properties": {
                 "example": {
@@ -654,41 +1052,77 @@
                 },
                 "pattern": {
                     "type": "string"
-                },
-                "source": {
-                    "type": "string"
                 }
             }
         },
-        "domain.GrammarExample": {
+        "dto.KanjiDTO": {
             "type": "object",
-            "properties": {
-                "japanese": {
-                    "type": "string"
-                },
-                "reading": {
-                    "type": "string"
-                },
-                "translation": {
-                    "type": "string"
-                }
-            }
-        },
-        "domain.Kanji": {
-            "type": "object",
+            "required": [
+                "text"
+            ],
             "properties": {
                 "info": {
                     "type": "string"
-                },
-                "priority": {
-                    "type": "integer"
                 },
                 "text": {
                     "type": "string"
                 }
             }
         },
-        "domain.Paragraph": {
+        "dto.KanjiResponse": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ParagraphQuestionDTO": {
+            "type": "object",
+            "required": [
+                "choices",
+                "jlpt",
+                "prompt",
+                "type"
+            ],
+            "properties": {
+                "choices": {
+                    "type": "array",
+                    "maxItems": 6,
+                    "minItems": 2,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "correct_index": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "explanation": {
+                    "type": "string"
+                },
+                "jlpt": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                },
+                "prompt": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "multiple_choice",
+                        "fill_in_blank"
+                    ]
+                }
+            }
+        },
+        "dto.ParagraphResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -703,11 +1137,8 @@
                 "questions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.Question"
+                        "$ref": "#/definitions/dto.QuestionResponse"
                     }
-                },
-                "source": {
-                    "type": "string"
                 },
                 "tags": {
                     "type": "array",
@@ -720,21 +1151,21 @@
                 }
             }
         },
-        "domain.Progress": {
+        "dto.ProgressResponse": {
             "type": "object",
             "properties": {
-                "cardsStudied": {
+                "cards_studied": {
                     "type": "integer"
                 },
-                "jlptlevel": {
+                "jlpt_level": {
                     "type": "integer"
                 },
-                "lastStudyAt": {
+                "last_study_at": {
                     "type": "string"
                 }
             }
         },
-        "domain.Question": {
+        "dto.QuestionResponse": {
             "type": "object",
             "properties": {
                 "choices": {
@@ -743,7 +1174,27 @@
                         "type": "string"
                     }
                 },
-                "correctIndex": {
+                "id": {
+                    "type": "string"
+                },
+                "prompt": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.QuestionWithAnswerResponse": {
+            "type": "object",
+            "properties": {
+                "choices": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "correct_index": {
                     "type": "integer"
                 },
                 "explanation": {
@@ -752,43 +1203,26 @@
                 "id": {
                     "type": "string"
                 },
-                "jlpt": {
-                    "type": "integer"
-                },
                 "prompt": {
                     "type": "string"
                 },
-                "section": {
-                    "$ref": "#/definitions/domain.TestSection"
-                },
-                "source": {
-                    "type": "string"
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "type": {
-                    "$ref": "#/definitions/domain.QuestionType"
+                    "type": "string"
                 }
             }
         },
-        "domain.QuestionType": {
-            "type": "string",
-            "enum": [
-                "multiple_choice",
-                "fill_in_blank",
-                "reorder"
+        "dto.ReadingDTO": {
+            "type": "object",
+            "required": [
+                "text"
             ],
-            "x-enum-varnames": [
-                "MultipleChoice",
-                "FillInBlank",
-                "Reorder"
-            ]
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            }
         },
-        "domain.Reading": {
+        "dto.ReadingResponse": {
             "type": "object",
             "properties": {
                 "info": {
@@ -797,24 +1231,22 @@
                         "type": "string"
                     }
                 },
-                "priority": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
-                },
                 "text": {
                     "type": "string"
                 }
             }
         },
-        "domain.Sense": {
+        "dto.SenseDTO": {
             "type": "object",
+            "required": [
+                "gloss"
+            ],
             "properties": {
                 "gloss": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
-                        "$ref": "#/definitions/domain.Gloss"
+                        "$ref": "#/definitions/dto.GlossDTO"
                     }
                 },
                 "pos": {
@@ -822,18 +1254,43 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "dto.SenseResponse": {
+            "type": "object",
+            "properties": {
+                "gloss": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GlossResponse"
+                    }
                 },
-                "source": {
+                "pos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "dto.TestPartResponse": {
+            "type": "object",
+            "properties": {
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.QuestionResponse"
+                    }
+                },
+                "section": {
                     "type": "string"
                 }
             }
         },
-        "domain.Test": {
+        "dto.TestResponse": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
@@ -843,51 +1300,21 @@
                 "sections": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.TestPart"
+                        "$ref": "#/definitions/dto.TestPartResponse"
                     }
                 },
-                "timeLimit": {
+                "time_limit": {
                     "type": "integer"
                 }
             }
         },
-        "domain.TestPart": {
+        "dto.UserResponse": {
             "type": "object",
             "properties": {
-                "questions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/domain.Question"
-                    }
-                },
-                "section": {
-                    "$ref": "#/definitions/domain.TestSection"
-                }
-            }
-        },
-        "domain.TestSection": {
-            "type": "string",
-            "enum": [
-                "vocabulary",
-                "grammar",
-                "reading"
-            ],
-            "x-enum-varnames": [
-                "SectionVocab",
-                "SectionGrammar",
-                "SectionReading"
-            ]
-        },
-        "domain.User": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "googleID": {
                     "type": "string"
                 },
                 "id": {
@@ -896,30 +1323,21 @@
                 "name": {
                     "type": "string"
                 },
-                "pictureURL": {
+                "picture_url": {
                     "type": "string"
                 },
-                "role": {
-                    "type": "string"
-                },
-                "studyProgress": {
-                    "$ref": "#/definitions/domain.Progress"
+                "study_progress": {
+                    "$ref": "#/definitions/dto.ProgressResponse"
                 }
             }
         },
-        "domain.Word": {
+        "dto.WordResponse": {
             "type": "object",
             "properties": {
-                "createdBy": {
-                    "type": "string"
-                },
-                "entSeq": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
-                "isCommon": {
+                "is_common": {
                     "type": "boolean"
                 },
                 "jlpt": {
@@ -928,23 +1346,20 @@
                 "kanji": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.Kanji"
+                        "$ref": "#/definitions/dto.KanjiResponse"
                     }
                 },
                 "readings": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.Reading"
+                        "$ref": "#/definitions/dto.ReadingResponse"
                     }
                 },
-                "senses": {
+                "sense": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/domain.Sense"
+                        "$ref": "#/definitions/dto.SenseResponse"
                     }
-                },
-                "source": {
-                    "type": "string"
                 }
             }
         }
