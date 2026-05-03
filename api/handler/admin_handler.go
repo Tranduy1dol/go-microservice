@@ -35,8 +35,10 @@ func NewAdminHandler(
 // @Tags        admin
 // @Accept      json
 // @Produce     json
-// @Param       word body domain.Word true "Word object"
-// @Success     201 {object} map[string]interface{}
+// @Param       word body dto.CreateWordRequest true "Word object"
+// @Success     201 {object} dto.WordResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/words [post]
 func (h *AdminHandler) CreateWord(ctx *gin.Context) {
@@ -61,6 +63,9 @@ func (h *AdminHandler) CreateWord(ctx *gin.Context) {
 // @Produce     json
 // @Param       id path string true "Word ID"
 // @Success     200 {object} map[string]bool
+// @Failure     400 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/words/{id} [delete]
 func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
@@ -83,8 +88,10 @@ func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
 // @Tags        admin
 // @Accept      json
 // @Produce     json
-// @Param       question body domain.Question true "Question object"
-// @Success     201 {object} map[string]interface{}
+// @Param       question body dto.CreateQuestionRequest true "Question object"
+// @Success     201 {object} dto.QuestionWithAnswerResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/questions [post]
 func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
@@ -114,6 +121,9 @@ func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
 // @Produce     json
 // @Param       id path string true "Question ID"
 // @Success     200 {object} map[string]bool
+// @Failure     400 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/questions/{id} [delete]
 func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
@@ -136,8 +146,10 @@ func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
 // @Tags        admin
 // @Accept      json
 // @Produce     json
-// @Param       paragraph body domain.Paragraph true "Paragraph object"
-// @Success     201 {object} map[string]interface{}
+// @Param       paragraph body dto.CreateParagraphRequest true "Paragraph object"
+// @Success     201 {object} dto.ParagraphResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/paragraphs [post]
 func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
@@ -162,6 +174,9 @@ func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
 // @Produce     json
 // @Param       id path string true "Paragraph ID"
 // @Success     200 {object} map[string]bool
+// @Failure     400 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/paragraphs/{id} [delete]
 func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
@@ -184,8 +199,10 @@ func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
 // @Tags        admin
 // @Accept      json
 // @Produce     json
-// @Param       grammar body domain.Grammar true "Grammar object"
-// @Success     201 {object} map[string]interface{}
+// @Param       grammar body dto.CreateGrammarRequest true "Grammar object"
+// @Success     201 {object} dto.GrammarResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/grammars [post]
 func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
@@ -210,6 +227,9 @@ func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
 // @Produce     json
 // @Param       id path string true "Grammar ID"
 // @Success     200 {object} map[string]bool
+// @Failure     400 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /admin/grammars/{id} [delete]
 func (h *AdminHandler) DeleteGrammar(ctx *gin.Context) {

@@ -22,8 +22,10 @@ func NewGrammarHandler(lookupSvc *usecase.LookupService) *GrammarHandler {
 // @Tags        grammar
 // @Produce     json
 // @Param       id path string true "Grammar ID"
-// @Success     200 {object} domain.Grammar
-// @Failure     404 {object} map[string]string
+// @Success     200 {object} dto.GrammarResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /grammar/{id} [get]
 func (h *GrammarHandler) GetGrammar(ctx *gin.Context) {
@@ -47,7 +49,9 @@ func (h *GrammarHandler) GetGrammar(ctx *gin.Context) {
 // @Produce     json
 // @Param       jlpt query int false "JLPT Level" default(5)
 // @Param       limit query int false "Limit" default(50)
-// @Success     200 {object} map[string]interface{}
+// @Success     200 {array} dto.GrammarResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /grammar [get]
 func (h *GrammarHandler) ListGrammar(ctx *gin.Context) {

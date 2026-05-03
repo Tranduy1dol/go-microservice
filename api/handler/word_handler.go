@@ -22,8 +22,10 @@ func NewWordHandler(lookupSvc *usecase.LookupService) *WordHandler {
 // @Tags        words
 // @Produce     json
 // @Param       id path string true "Word ID"
-// @Success     200 {object} domain.Word
-// @Failure     404 {object} map[string]string
+// @Success     200 {object} dto.WordResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /words/{id} [get]
 func (h *WordHandler) GetWord(ctx *gin.Context) {
@@ -48,7 +50,9 @@ func (h *WordHandler) GetWord(ctx *gin.Context) {
 // @Produce     json
 // @Param       q     query string true  "Search query"
 // @Param       limit query int    false "Limit" default(20)
-// @Success     200 {object} map[string]interface{}
+// @Success     200 {array} dto.WordResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /words/search [get]
 func (h *WordHandler) SearchWords(ctx *gin.Context) {
@@ -75,6 +79,8 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
 // @Success     200 {object} map[string]interface{}
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /words/jlpt/{level} [get]
 func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {

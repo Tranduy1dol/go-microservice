@@ -67,7 +67,7 @@ func SetupRouter(
 		v1.GET("/grammar/:id", grammarHandler.GetGrammar)
 		v1.GET("/grammar", grammarHandler.ListGrammar)
 
-		v1.POST("/tests/generate", testHandler.GenerateTest)
+		v1.POST("/tests/generate/:level", testHandler.GenerateTest)
 
 		v1.GET("/users/me", userHandler.GetMe)
 

@@ -21,9 +21,10 @@ func NewUserHandler(userRepo port.UserRepository) *UserHandler {
 // @Summary     Get current user profile
 // @Tags        users
 // @Produce     json
-// @Success     200 {object} domain.User
-// @Failure     401 {object} map[string]string
-// @Failure     404 {object} map[string]string
+// @Success     200 {object} dto.UserResponse
+// @Failure     401 {object} apperror.AppError
+// @Failure     404 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
 // @Router      /users/me [get]
 func (h *UserHandler) GetMe(ctx *gin.Context) {

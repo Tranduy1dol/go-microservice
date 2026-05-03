@@ -20,13 +20,13 @@ func NewTestHandler(testGenSvc *usecase.TestGeneratorService) *TestHandler {
 // GenerateTest godoc
 // @Summary     Generate a new test
 // @Tags        tests
-// @Accept      json
 // @Produce     json
-// @Param       req body map[string]int true "Request body containing jlpt level"
-// @Success     200 {object} domain.Test
-// @Failure     400 {object} map[string]string
+// @Param       level path int true "JLPT Level"
+// @Success     200 {object} dto.TestResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
-// @Router      /tests/generate [post]
+// @Router      /tests/generate/{level} [post]
 func (h *TestHandler) GenerateTest(ctx *gin.Context) {
 	var param dto.JLPTLevelParam
 	if err := ctx.ShouldBindUri(&param); err != nil {
