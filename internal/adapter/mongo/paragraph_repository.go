@@ -22,11 +22,7 @@ func (r *ParagraphRepository) GetByID(ctx context.Context, id string) (*domain.P
 
 	var paragraph domain.Paragraph
 	err := r.collection.FindOne(ctx, filter).Decode(&paragraph)
-	if err != nil {
-		return nil, err
-	}
-
-	return &paragraph, nil
+	return &paragraph, wrapError(err)
 }
 
 func (r *ParagraphRepository) GetByJLPT(ctx context.Context, level int, limit, offset int) ([]*domain.Paragraph, error) {
@@ -35,16 +31,13 @@ func (r *ParagraphRepository) GetByJLPT(ctx context.Context, level int, limit, o
 	opt := options.Find().SetLimit(int64(limit)).SetSkip(int64(offset))
 	cursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var paragraphs []*domain.Paragraph
-	if err := cursor.All(ctx, &paragraphs); err != nil {
-		return nil, err
-	}
-
-	return paragraphs, nil
+	err = cursor.All(ctx, &paragraphs)
+	return paragraphs, wrapError(err)
 }
 
 func (r *ParagraphRepository) GetRandom(ctx context.Context, count int) ([]*domain.Paragraph, error) {
@@ -56,25 +49,18 @@ func (r *ParagraphRepository) GetRandom(ctx context.Context, count int) ([]*doma
 
 	cursor, err := r.collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var paragraph []*domain.Paragraph
-	if err := cursor.All(ctx, &paragraph); err != nil {
-		return nil, err
-	}
-
-	return paragraph, nil
+	err = cursor.All(ctx, &paragraph)
+	return paragraph, wrapError(err)
 }
 
 func (r *ParagraphRepository) Create(ctx context.Context, p *domain.Paragraph) error {
 	_, err := r.collection.InsertOne(ctx, p)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return wrapError(err)
 }
 
 func (r *ParagraphRepository) BulkCreate(ctx context.Context, paragraphs []*domain.Paragraph) (int64, error) {
@@ -85,7 +71,7 @@ func (r *ParagraphRepository) BulkCreate(ctx context.Context, paragraphs []*doma
 
 	result, err := r.collection.InsertMany(ctx, docs)
 	if err != nil {
-		return 0, err
+		return 0, wrapError(err)
 	}
 
 	return int64(len(result.InsertedIDs)), nil
@@ -93,9 +79,13 @@ func (r *ParagraphRepository) BulkCreate(ctx context.Context, paragraphs []*doma
 
 func (r *ParagraphRepository) Delete(ctx context.Context, id string) error {
 	filter := bson.M{"_id": id}
-	_, err := r.collection.DeleteOne(ctx, filter)
+	result, err := r.collection.DeleteOne(ctx, filter)
 	if err != nil {
-		return err
+		return wrapError(err)
+	}
+
+	if result.DeletedCount == 0 {
+		return domain.ErrNotFound
 	}
 
 	return nil

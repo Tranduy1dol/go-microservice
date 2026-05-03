@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +30,7 @@ func (h *WordHandler) GetWord(ctx *gin.Context) {
 	id := ctx.Param("id")
 	word, err := h.lookupSvc.GetWord(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "word not found"})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -55,7 +56,7 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "20"))
 	words, err := h.lookupSvc.SearchWord(ctx.Request.Context(), query, limit)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -84,7 +85,7 @@ func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {
 
 	words, total, err := h.lookupSvc.BrowseWordByJLPT(ctx.Request.Context(), level, limit, offset)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 

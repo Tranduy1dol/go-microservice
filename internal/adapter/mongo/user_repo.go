@@ -66,16 +66,12 @@ func (r *UserRepository) Upsert(ctx context.Context, googleID, email, name, pict
 
 	var user domain.User
 	err := r.collection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&user)
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
+	return &user, wrapError(err)
 }
 
 func (r *UserRepository) UpdateProgress(ctx context.Context, userID string, progress domain.Progress) error {
 	filter := bson.M{"_id": userID}
-	update := bson.M{"$set": bson.M{"progress": progress}}
+	update := bson.M{"$set": bson.M{"study_progress": progress}}
 	_, err := r.collection.UpdateOne(ctx, filter, update)
-	return err
+	return wrapError(err)
 }

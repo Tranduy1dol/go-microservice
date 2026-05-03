@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/internal/domain"
 	"github.com/Tranduy1dol/learning-japanese/internal/port"
 	"github.com/gin-gonic/gin"
@@ -41,12 +42,12 @@ func NewAdminHandler(
 func (h *AdminHandler) CreateWord(ctx *gin.Context) {
 	var word domain.Word
 	if err := ctx.BindJSON(&word); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid word"})
+		apperror.Response(ctx, err)
 		return
 	}
 
 	if err := h.wordRepo.Create(ctx.Request.Context(), &word); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -64,7 +65,7 @@ func (h *AdminHandler) CreateWord(ctx *gin.Context) {
 func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if err := h.wordRepo.Delete(ctx.Request.Context(), id); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -83,12 +84,12 @@ func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
 func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
 	var question domain.Question
 	if err := ctx.BindJSON(&question); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid question"})
+		apperror.Response(ctx, err)
 		return
 	}
 
 	if err := h.questionRepo.Create(ctx.Request.Context(), &question); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -106,7 +107,7 @@ func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
 func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if err := h.questionRepo.Delete(ctx.Request.Context(), id); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -125,12 +126,12 @@ func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
 func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
 	var paragraph domain.Paragraph
 	if err := ctx.BindJSON(&paragraph); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid paragraph"})
+		apperror.Response(ctx, err)
 		return
 	}
 
 	if err := h.paragraphRepo.Create(ctx.Request.Context(), &paragraph); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -148,7 +149,7 @@ func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
 func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if err := h.paragraphRepo.Delete(ctx.Request.Context(), id); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -167,12 +168,12 @@ func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
 func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
 	var grammar domain.Grammar
 	if err := ctx.BindJSON(&grammar); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid grammar"})
+		apperror.Response(ctx, err)
 		return
 	}
 
 	if err := h.grammarRepo.Create(ctx.Request.Context(), &grammar); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 
@@ -190,7 +191,7 @@ func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
 func (h *AdminHandler) DeleteGrammar(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if err := h.grammarRepo.Delete(ctx.Request.Context(), id); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 

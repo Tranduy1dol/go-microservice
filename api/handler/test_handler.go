@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -30,13 +31,13 @@ func (h *TestHandler) GenerateTest(ctx *gin.Context) {
 		JLPT int `json:"jlpt"`
 	}
 	if err := ctx.BindJSON(&req); err != nil || req.JLPT < 1 || req.JLPT > 5 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid jlpt level"})
+		apperror.Response(ctx, err)
 		return
 	}
 
 	test, err := h.testGenSvc.GenerateTest(ctx.Request.Context(), req.JLPT)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 	ctx.JSON(http.StatusOK, test)

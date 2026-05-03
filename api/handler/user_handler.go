@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/internal/port"
 	"github.com/gin-gonic/gin"
 )
@@ -33,7 +34,7 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 
 	user, err := h.userRepo.GetByID(ctx.Request.Context(), userID)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+		apperror.Response(ctx, err)
 		return
 	}
 

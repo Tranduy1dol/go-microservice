@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +30,7 @@ func (h *GrammarHandler) GetGrammar(ctx *gin.Context) {
 	id := ctx.Param("id")
 	grammar, err := h.lookupSvc.GetGrammar(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "grammar not found"})
+		apperror.Response(ctx, err)
 		return
 	}
 	ctx.JSON(http.StatusOK, grammar)
@@ -50,7 +51,7 @@ func (h *GrammarHandler) ListGrammar(ctx *gin.Context) {
 
 	grammars, err := h.lookupSvc.ListGrammarByJLPT(ctx.Request.Context(), level, limit)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		apperror.Response(ctx, err)
 		return
 	}
 

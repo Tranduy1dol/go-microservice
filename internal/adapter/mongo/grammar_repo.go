@@ -22,11 +22,7 @@ func (r *GrammarRepository) GetByID(ctx context.Context, id string) (*domain.Gra
 
 	var grammar domain.Grammar
 	err := r.collection.FindOne(ctx, filter).Decode(&grammar)
-	if err != nil {
-		return nil, err
-	}
-
-	return &grammar, nil
+	return &grammar, wrapError(err)
 }
 
 func (r *GrammarRepository) GetByJLPT(ctx context.Context, level int, limit int) ([]*domain.Grammar, error) {
@@ -35,16 +31,13 @@ func (r *GrammarRepository) GetByJLPT(ctx context.Context, level int, limit int)
 	opt := options.Find().SetLimit(int64(limit))
 	cursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var grammars []*domain.Grammar
-	if err := cursor.All(ctx, &grammars); err != nil {
-		return nil, err
-	}
-
-	return grammars, nil
+	err = cursor.All(ctx, &grammars)
+	return grammars, wrapError(err)
 }
 
 func (r *GrammarRepository) GetRandom(ctx context.Context, count int) ([]*domain.Grammar, error) {
@@ -56,25 +49,18 @@ func (r *GrammarRepository) GetRandom(ctx context.Context, count int) ([]*domain
 
 	cursor, err := r.collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var grammars []*domain.Grammar
-	if err := cursor.All(ctx, &grammars); err != nil {
-		return nil, err
-	}
-
-	return grammars, nil
+	err = cursor.All(ctx, &grammars)
+	return grammars, wrapError(err)
 }
 
 func (r *GrammarRepository) Create(ctx context.Context, g *domain.Grammar) error {
 	_, err := r.collection.InsertOne(ctx, g)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return wrapError(err)
 }
 
 func (r *GrammarRepository) BulkCreate(ctx context.Context, grammars []*domain.Grammar) (int64, error) {
@@ -85,7 +71,7 @@ func (r *GrammarRepository) BulkCreate(ctx context.Context, grammars []*domain.G
 
 	result, err := r.collection.InsertMany(ctx, docs)
 	if err != nil {
-		return 0, err
+		return 0, wrapError(err)
 	}
 
 	return int64(len(result.InsertedIDs)), nil
@@ -93,9 +79,13 @@ func (r *GrammarRepository) BulkCreate(ctx context.Context, grammars []*domain.G
 
 func (r *GrammarRepository) Delete(ctx context.Context, id string) error {
 	filter := bson.M{"_id": id}
-	_, err := r.collection.DeleteOne(ctx, filter)
+	result, err := r.collection.DeleteOne(ctx, filter)
 	if err != nil {
-		return err
+		return wrapError(err)
+	}
+
+	if result.DeletedCount == 0 {
+		return domain.ErrNotFound
 	}
 
 	return nil

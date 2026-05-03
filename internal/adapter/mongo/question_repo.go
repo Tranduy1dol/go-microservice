@@ -22,11 +22,7 @@ func (r *QuestionRepository) GetByID(ctx context.Context, id string) (*domain.Qu
 
 	var question domain.Question
 	err := r.collection.FindOne(ctx, filter).Decode(&question)
-	if err != nil {
-		return nil, err
-	}
-
-	return &question, nil
+	return &question, wrapError(err)
 }
 
 func (r *QuestionRepository) GetByJLPT(ctx context.Context, level int, section domain.TestSection, limit int) ([]*domain.Question, error) {
@@ -40,16 +36,13 @@ func (r *QuestionRepository) GetByJLPT(ctx context.Context, level int, section d
 	opt := options.Find().SetLimit(int64(limit))
 	cursor, err := r.collection.Find(ctx, filter, opt)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var questions []*domain.Question
-	if err := cursor.All(ctx, &questions); err != nil {
-		return nil, err
-	}
-
-	return questions, nil
+	err = cursor.All(ctx, &questions)
+	return questions, wrapError(err)
 }
 
 func (r *QuestionRepository) GetRandom(ctx context.Context, count int) ([]*domain.Question, error) {
@@ -61,25 +54,18 @@ func (r *QuestionRepository) GetRandom(ctx context.Context, count int) ([]*domai
 
 	cursor, err := r.collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var questions []*domain.Question
-	if err := cursor.All(ctx, &questions); err != nil {
-		return nil, err
-	}
-
-	return questions, nil
+	err = cursor.All(ctx, &questions)
+	return questions, wrapError(err)
 }
 
 func (r *QuestionRepository) Create(ctx context.Context, q *domain.Question) error {
 	_, err := r.collection.InsertOne(ctx, q)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return wrapError(err)
 }
 
 func (r *QuestionRepository) BulkCreate(ctx context.Context, questions []*domain.Question) (int64, error) {
@@ -90,7 +76,7 @@ func (r *QuestionRepository) BulkCreate(ctx context.Context, questions []*domain
 
 	result, err := r.collection.InsertMany(ctx, docs)
 	if err != nil {
-		return 0, err
+		return 0, wrapError(err)
 	}
 
 	return int64(len(result.InsertedIDs)), nil
@@ -98,9 +84,13 @@ func (r *QuestionRepository) BulkCreate(ctx context.Context, questions []*domain
 
 func (r *QuestionRepository) Delete(ctx context.Context, id string) error {
 	filter := bson.M{"_id": id}
-	_, err := r.collection.DeleteOne(ctx, filter)
+	result, err := r.collection.DeleteOne(ctx, filter)
 	if err != nil {
-		return err
+		return wrapError(err)
+	}
+
+	if result.DeletedCount == 0 {
+		return domain.ErrNotFound
 	}
 
 	return nil

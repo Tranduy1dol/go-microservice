@@ -22,14 +22,7 @@ func (r *WordRepository) GetByID(ctx context.Context, id string) (*domain.Word, 
 
 	var word domain.Word
 	err := r.collection.FindOne(ctx, filter).Decode(&word)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, err
-		}
-		return nil, err
-	}
-
-	return &word, nil
+	return &word, wrapError(err)
 }
 
 func (r *WordRepository) GetRandom(ctx context.Context, count int) ([]*domain.Word, error) {
@@ -41,16 +34,13 @@ func (r *WordRepository) GetRandom(ctx context.Context, count int) ([]*domain.Wo
 
 	cursor, err := r.collection.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var words []*domain.Word
-	if err := cursor.All(ctx, &words); err != nil {
-		return nil, err
-	}
-
-	return words, nil
+	err = cursor.All(ctx, &words)
+	return words, wrapError(err)
 }
 
 func (r *WordRepository) GetByKanji(ctx context.Context, kanji string) (*domain.Word, error) {
@@ -58,14 +48,7 @@ func (r *WordRepository) GetByKanji(ctx context.Context, kanji string) (*domain.
 
 	var word domain.Word
 	err := r.collection.FindOne(ctx, filter).Decode(&word)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, err
-		}
-		return nil, err
-	}
-
-	return &word, nil
+	return &word, wrapError(err)
 }
 
 func (r *WordRepository) GetByReading(ctx context.Context, reading string) ([]*domain.Word, error) {
@@ -73,16 +56,13 @@ func (r *WordRepository) GetByReading(ctx context.Context, reading string) ([]*d
 
 	cursor, err := r.collection.Find(ctx, filter)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var words []*domain.Word
-	if err := cursor.All(ctx, &words); err != nil {
-		return nil, err
-	}
-
-	return words, nil
+	err = cursor.All(ctx, &words)
+	return words, wrapError(err)
 }
 
 func (r *WordRepository) Search(ctx context.Context, query string, limit int) ([]*domain.Word, error) {
@@ -96,16 +76,13 @@ func (r *WordRepository) Search(ctx context.Context, query string, limit int) ([
 	opts := options.Find().SetLimit(int64(limit))
 	cursor, err := r.collection.Find(ctx, filter, opts)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var words []*domain.Word
-	if err := cursor.All(ctx, &words); err != nil {
-		return nil, err
-	}
-
-	return words, nil
+	err = cursor.All(ctx, &words)
+	return words, wrapError(err)
 }
 
 func (r *WordRepository) GetByJLPT(ctx context.Context, level int, limit, offset int) ([]*domain.Word, int, error) {
@@ -113,31 +90,24 @@ func (r *WordRepository) GetByJLPT(ctx context.Context, level int, limit, offset
 
 	total, err := r.collection.CountDocuments(ctx, filter)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, wrapError(err)
 	}
 
 	opts := options.Find().SetLimit(int64(limit)).SetSkip(int64(offset))
 	cursor, err := r.collection.Find(ctx, filter, opts)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, wrapError(err)
 	}
 	defer func() { _ = cursor.Close(ctx) }()
 
 	var words []*domain.Word
-	if err := cursor.All(ctx, &words); err != nil {
-		return nil, 0, err
-	}
-
-	return words, int(total), nil
+	err = cursor.All(ctx, &words)
+	return words, int(total), wrapError(err)
 }
 
 func (r *WordRepository) Create(ctx context.Context, word *domain.Word) error {
 	_, err := r.collection.InsertOne(ctx, word)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return wrapError(err)
 }
 
 func (r *WordRepository) BulkCreate(ctx context.Context, words []*domain.Word) (int64, error) {
@@ -148,7 +118,7 @@ func (r *WordRepository) BulkCreate(ctx context.Context, words []*domain.Word) (
 
 	result, err := r.collection.InsertMany(ctx, docs)
 	if err != nil {
-		return 0, err
+		return 0, wrapError(err)
 	}
 
 	return int64(len(result.InsertedIDs)), nil
@@ -156,9 +126,13 @@ func (r *WordRepository) BulkCreate(ctx context.Context, words []*domain.Word) (
 
 func (r *WordRepository) Delete(ctx context.Context, id string) error {
 	filter := bson.M{"_id": id}
-	_, err := r.collection.DeleteOne(ctx, filter)
+	result, err := r.collection.DeleteOne(ctx, filter)
 	if err != nil {
-		return err
+		return wrapError(err)
+	}
+
+	if result.DeletedCount == 0 {
+		return domain.ErrNotFound
 	}
 
 	return nil
