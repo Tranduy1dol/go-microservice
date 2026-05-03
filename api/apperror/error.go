@@ -2,9 +2,12 @@ package apperror
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/Tranduy1dol/learning-japanese/internal/domain"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type AppError struct {
@@ -56,6 +59,23 @@ func FromDomainError(err error) *AppError {
 	default:
 		return Internal("")
 	}
+}
+
+func FromValidationError(err error) *AppError {
+	if ve, ok := errors.AsType[validator.ValidationErrors](err); ok {
+		fields := make([]string, len(ve))
+		for i, fe := range ve {
+			fields[i] = fmt.Sprintf("%s: failed on '%s'", fe.Field(), fe.Tag())
+		}
+
+		return &AppError{
+			Code:    400,
+			Message: "validation failed",
+			Detail:  strings.Join(fields, "; "),
+		}
+	}
+
+	return BadRequest("invalid request body")
 }
 
 func Response(ctx *gin.Context, err error) {

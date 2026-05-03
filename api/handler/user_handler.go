@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
+	"github.com/Tranduy1dol/learning-japanese/api/dto"
 	"github.com/Tranduy1dol/learning-japanese/internal/port"
 	"github.com/gin-gonic/gin"
 )
@@ -26,9 +27,9 @@ func NewUserHandler(userRepo port.UserRepository) *UserHandler {
 // @Security    BearerAuth
 // @Router      /users/me [get]
 func (h *UserHandler) GetMe(ctx *gin.Context) {
-	userID := ctx.GetString("user_id")
-	if userID == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+	userID, err := dto.UserIDFromContext(ctx)
+	if err != nil {
+		apperror.Response(ctx, err)
 		return
 	}
 

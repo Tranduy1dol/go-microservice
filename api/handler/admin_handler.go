@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
-	"github.com/Tranduy1dol/learning-japanese/internal/domain"
+	"github.com/Tranduy1dol/learning-japanese/api/dto"
 	"github.com/Tranduy1dol/learning-japanese/internal/port"
 	"github.com/gin-gonic/gin"
 )
@@ -40,13 +40,14 @@ func NewAdminHandler(
 // @Security    BearerAuth
 // @Router      /admin/words [post]
 func (h *AdminHandler) CreateWord(ctx *gin.Context) {
-	var word domain.Word
-	if err := ctx.BindJSON(&word); err != nil {
-		apperror.Response(ctx, err)
+	var req dto.CreateWordRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
 		return
 	}
 
-	if err := h.wordRepo.Create(ctx.Request.Context(), &word); err != nil {
+	word := req.ToDomain()
+	if err := h.wordRepo.Create(ctx.Request.Context(), word); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -63,8 +64,13 @@ func (h *AdminHandler) CreateWord(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/words/{id} [delete]
 func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if err := h.wordRepo.Delete(ctx.Request.Context(), id); err != nil {
+	var param dto.IDParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	if err := h.wordRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -82,13 +88,19 @@ func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/questions [post]
 func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
-	var question domain.Question
-	if err := ctx.BindJSON(&question); err != nil {
-		apperror.Response(ctx, err)
+	var req dto.CreateQuestionRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
 		return
 	}
 
-	if err := h.questionRepo.Create(ctx.Request.Context(), &question); err != nil {
+	if req.CorrectIndex >= len(req.Choices) {
+		apperror.Response(ctx, apperror.BadRequest("correct index out of choices"))
+		return
+	}
+
+	question := req.ToDomain()
+	if err := h.questionRepo.Create(ctx.Request.Context(), question); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -105,8 +117,13 @@ func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/questions/{id} [delete]
 func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if err := h.questionRepo.Delete(ctx.Request.Context(), id); err != nil {
+	var param dto.IDParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	if err := h.questionRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -124,13 +141,14 @@ func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/paragraphs [post]
 func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
-	var paragraph domain.Paragraph
-	if err := ctx.BindJSON(&paragraph); err != nil {
-		apperror.Response(ctx, err)
+	var req dto.CreateParagraphRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
 		return
 	}
 
-	if err := h.paragraphRepo.Create(ctx.Request.Context(), &paragraph); err != nil {
+	paragraph := req.ToDomain()
+	if err := h.paragraphRepo.Create(ctx.Request.Context(), paragraph); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -147,8 +165,13 @@ func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/paragraphs/{id} [delete]
 func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if err := h.paragraphRepo.Delete(ctx.Request.Context(), id); err != nil {
+	var param dto.IDParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	if err := h.paragraphRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -166,18 +189,19 @@ func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/grammars [post]
 func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
-	var grammar domain.Grammar
-	if err := ctx.BindJSON(&grammar); err != nil {
+	var req dto.CreateGrammarRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
 
-	if err := h.grammarRepo.Create(ctx.Request.Context(), &grammar); err != nil {
+	grammar := req.ToDomain()
+	if err := h.grammarRepo.Create(ctx.Request.Context(), grammar); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"grammar": grammar})
+	ctx.JSON(http.StatusCreated, gin.H{"grammar": req})
 }
 
 // DeleteGrammar godoc
@@ -189,8 +213,13 @@ func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /admin/grammars/{id} [delete]
 func (h *AdminHandler) DeleteGrammar(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if err := h.grammarRepo.Delete(ctx.Request.Context(), id); err != nil {
+	var param dto.IDParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	if err := h.grammarRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}

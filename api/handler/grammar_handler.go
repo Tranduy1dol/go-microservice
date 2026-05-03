@@ -2,9 +2,9 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
+	"github.com/Tranduy1dol/learning-japanese/api/dto"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -27,8 +27,13 @@ func NewGrammarHandler(lookupSvc *usecase.LookupService) *GrammarHandler {
 // @Security    BearerAuth
 // @Router      /grammar/{id} [get]
 func (h *GrammarHandler) GetGrammar(ctx *gin.Context) {
-	id := ctx.Param("id")
-	grammar, err := h.lookupSvc.GetGrammar(ctx.Request.Context(), id)
+	var param dto.IDParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	grammar, err := h.lookupSvc.GetGrammar(ctx.Request.Context(), param.ID)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return
@@ -46,10 +51,19 @@ func (h *GrammarHandler) GetGrammar(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /grammar [get]
 func (h *GrammarHandler) ListGrammar(ctx *gin.Context) {
-	level, _ := strconv.Atoi(ctx.DefaultQuery("jlpt", "5"))
-	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "50"))
+	var param dto.JLPTLevelParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
 
-	grammars, err := h.lookupSvc.ListGrammarByJLPT(ctx.Request.Context(), level, limit)
+	var page dto.PaginationQuery
+	if err := ctx.ShouldBindQuery(&page); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	grammars, err := h.lookupSvc.ListGrammarByJLPT(ctx.Request.Context(), param.Level, page.Limit)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return

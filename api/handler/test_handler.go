@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
+	"github.com/Tranduy1dol/learning-japanese/api/dto"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -27,15 +28,13 @@ func NewTestHandler(testGenSvc *usecase.TestGeneratorService) *TestHandler {
 // @Security    BearerAuth
 // @Router      /tests/generate [post]
 func (h *TestHandler) GenerateTest(ctx *gin.Context) {
-	var req struct {
-		JLPT int `json:"jlpt"`
-	}
-	if err := ctx.BindJSON(&req); err != nil || req.JLPT < 1 || req.JLPT > 5 {
-		apperror.Response(ctx, err)
+	var param dto.JLPTLevelParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
 		return
 	}
 
-	test, err := h.testGenSvc.GenerateTest(ctx.Request.Context(), req.JLPT)
+	test, err := h.testGenSvc.GenerateTest(ctx.Request.Context(), param.Level)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return

@@ -2,9 +2,9 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
+	"github.com/Tranduy1dol/learning-japanese/api/dto"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -27,8 +27,13 @@ func NewWordHandler(lookupSvc *usecase.LookupService) *WordHandler {
 // @Security    BearerAuth
 // @Router      /words/{id} [get]
 func (h *WordHandler) GetWord(ctx *gin.Context) {
-	id := ctx.Param("id")
-	word, err := h.lookupSvc.GetWord(ctx.Request.Context(), id)
+	var param dto.IDParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	word, err := h.lookupSvc.GetWord(ctx.Request.Context(), param.ID)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return
@@ -47,14 +52,13 @@ func (h *WordHandler) GetWord(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /words/search [get]
 func (h *WordHandler) SearchWords(ctx *gin.Context) {
-	query := ctx.Query("q")
-	if query == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "query required"})
+	var query dto.SearchWordQuery
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
 		return
 	}
 
-	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "20"))
-	words, err := h.lookupSvc.SearchWord(ctx.Request.Context(), query, limit)
+	words, err := h.lookupSvc.SearchWord(ctx.Request.Context(), query.Q, query.Limit)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return
@@ -74,16 +78,19 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 // @Security    BearerAuth
 // @Router      /words/jlpt/{level} [get]
 func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {
-	level, err := strconv.Atoi(ctx.Param("level"))
-	if err != nil || level < 1 || level > 5 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid jlpt level"})
+	var param dto.JLPTLevelParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
 		return
 	}
 
-	limit, _ := strconv.Atoi(ctx.DefaultQuery("limit", "50"))
-	offset, _ := strconv.Atoi(ctx.DefaultQuery("offset", "0"))
+	var page dto.PaginationQuery
+	if err := ctx.ShouldBindQuery(&page); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
 
-	words, total, err := h.lookupSvc.BrowseWordByJLPT(ctx.Request.Context(), level, limit, offset)
+	words, total, err := h.lookupSvc.BrowseWordByJLPT(ctx.Request.Context(), param.Level, page.Limit, page.Offset)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return
@@ -92,7 +99,7 @@ func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"words":  words,
 		"total":  total,
-		"limit":  limit,
-		"offset": offset,
+		"limit":  page.Limit,
+		"offset": page.Offset,
 	})
 }
