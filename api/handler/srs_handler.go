@@ -114,7 +114,7 @@ func (h *SRSHandler) ReviewCard(ctx *gin.Context) {
 		return
 	}
 
-	card, err := h.srsSvc.ReviewCard(ctx, userID, param.ID, req.Quality)
+	card, err := h.srsSvc.ReviewCard(ctx.Request.Context(), userID, param.ID, req.Quality)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return
