@@ -8,6 +8,7 @@ import (
 	"github.com/Tranduy1dol/learning-japanese/config"
 	"github.com/Tranduy1dol/learning-japanese/internal/adapter/mongo"
 	"github.com/Tranduy1dol/learning-japanese/internal/auth"
+	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 )
 
 // @title           Learning Japanese API
@@ -41,7 +42,12 @@ func main() {
 	jwtSvc := auth.NewJWTService(cfg.OAuth.JWTSecret)
 	googleOAuthService := auth.NewGoogleOAuthService(cfg.OAuth, jwtSvc, userRepo)
 
-	router := api.SetupRouter(cfg.Server.EnableSwagger, googleOAuthService, jwtSvc, userRepo, wordRepo, questionRepo, paragraphRepo, grammarRepo)
+	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo)
+	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo)
+	userSvc := usecase.NewUserService(userRepo)
+	adminSvc := usecase.NewAdminService(wordRepo, questionRepo, paragraphRepo, grammarRepo)
+
+	router := api.SetupRouter(cfg.Server.EnableSwagger, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc)
 
 	log.Printf("server starting on port %s", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {

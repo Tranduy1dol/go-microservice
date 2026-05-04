@@ -5,16 +5,18 @@ import (
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/api/dto"
-	"github.com/Tranduy1dol/learning-japanese/internal/port"
+	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
-	userRepo port.UserRepository
+	userSvc *usecase.UserService
 }
 
-func NewUserHandler(userRepo port.UserRepository) *UserHandler {
-	return &UserHandler{userRepo: userRepo}
+func NewUserHandler(userSvc *usecase.UserService) *UserHandler {
+	return &UserHandler{
+		userSvc: userSvc,
+	}
 }
 
 // GetMe godoc
@@ -34,7 +36,7 @@ func (h *UserHandler) GetMe(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.userRepo.GetByID(ctx.Request.Context(), userID)
+	user, err := h.userSvc.GetMe(ctx.Request.Context(), userID)
 	if err != nil {
 		apperror.Response(ctx, err)
 		return

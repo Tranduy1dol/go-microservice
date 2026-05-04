@@ -5,7 +5,6 @@ import (
 	"github.com/Tranduy1dol/learning-japanese/api/middleware"
 	_ "github.com/Tranduy1dol/learning-japanese/docs"
 	"github.com/Tranduy1dol/learning-japanese/internal/auth"
-	"github.com/Tranduy1dol/learning-japanese/internal/port"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -16,11 +15,10 @@ func SetupRouter(
 	enableSwagger bool,
 	authSvc *auth.GoogleOAuthService,
 	jwtSvc *auth.JWTService,
-	userRepo port.UserRepository,
-	wordRepo port.DictionaryRepository,
-	questionRepo port.QuestionRepository,
-	paragraphRepo port.ParagraphRepository,
-	grammarRepo port.GrammarRepository,
+	lookupSvc *usecase.LookupService,
+	testGenSvc *usecase.TestGeneratorService,
+	userSvc *usecase.UserService,
+	adminSvc *usecase.AdminService,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -49,16 +47,13 @@ func SetupRouter(
 		})
 	}
 
-	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo)
-	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo)
-
 	v1 := r.Group("/api/v1")
 	v1.Use(middleware.AuthMiddleware(jwtSvc))
 	{
 		wordHandler := handler.NewWordHandler(lookupSvc)
 		grammarHandler := handler.NewGrammarHandler(lookupSvc)
 		testHandler := handler.NewTestHandler(testGenSvc)
-		userHandler := handler.NewUserHandler(userRepo)
+		userHandler := handler.NewUserHandler(userSvc)
 
 		v1.GET("/words/:id", wordHandler.GetWord)
 		v1.GET("/words/search", wordHandler.SearchWords)
@@ -74,7 +69,7 @@ func SetupRouter(
 		admin := v1.Group("/admin")
 		admin.Use(middleware.AdminMiddleware())
 		{
-			adminHandler := handler.NewAdminHandler(wordRepo, questionRepo, paragraphRepo, grammarRepo)
+			adminHandler := handler.NewAdminHandler(adminSvc)
 			admin.POST("/words", adminHandler.CreateWord)
 			admin.DELETE("/words/:id", adminHandler.DeleteWord)
 			admin.POST("/questions", adminHandler.CreateQuestion)

@@ -5,28 +5,17 @@ import (
 
 	"github.com/Tranduy1dol/learning-japanese/api/apperror"
 	"github.com/Tranduy1dol/learning-japanese/api/dto"
-	"github.com/Tranduy1dol/learning-japanese/internal/port"
+	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type AdminHandler struct {
-	wordRepo      port.DictionaryRepository
-	questionRepo  port.QuestionRepository
-	paragraphRepo port.ParagraphRepository
-	grammarRepo   port.GrammarRepository
+	adminSvc *usecase.AdminService
 }
 
-func NewAdminHandler(
-	wordRepo port.DictionaryRepository,
-	questionRepo port.QuestionRepository,
-	paragraphRepo port.ParagraphRepository,
-	grammarRepo port.GrammarRepository,
-) *AdminHandler {
+func NewAdminHandler(adminSvc *usecase.AdminService) *AdminHandler {
 	return &AdminHandler{
-		wordRepo:      wordRepo,
-		questionRepo:  questionRepo,
-		paragraphRepo: paragraphRepo,
-		grammarRepo:   grammarRepo,
+		adminSvc: adminSvc,
 	}
 }
 
@@ -49,7 +38,7 @@ func (h *AdminHandler) CreateWord(ctx *gin.Context) {
 	}
 
 	word := req.ToDomain()
-	if err := h.wordRepo.Create(ctx.Request.Context(), word); err != nil {
+	if err := h.adminSvc.CreateWord(ctx.Request.Context(), word); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -75,7 +64,7 @@ func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.wordRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
+	if err := h.adminSvc.DeleteWord(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -101,13 +90,8 @@ func (h *AdminHandler) CreateQuestion(ctx *gin.Context) {
 		return
 	}
 
-	if req.CorrectIndex >= len(req.Choices) {
-		apperror.Response(ctx, apperror.BadRequest("correct index out of choices"))
-		return
-	}
-
 	question := req.ToDomain()
-	if err := h.questionRepo.Create(ctx.Request.Context(), question); err != nil {
+	if err := h.adminSvc.CreateQuestion(ctx.Request.Context(), question); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -133,7 +117,7 @@ func (h *AdminHandler) DeleteQuestion(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.questionRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
+	if err := h.adminSvc.DeleteQuestion(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -160,7 +144,7 @@ func (h *AdminHandler) CreateParagraph(ctx *gin.Context) {
 	}
 
 	paragraph := req.ToDomain()
-	if err := h.paragraphRepo.Create(ctx.Request.Context(), paragraph); err != nil {
+	if err := h.adminSvc.CreateParagraph(ctx.Request.Context(), paragraph); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -186,7 +170,7 @@ func (h *AdminHandler) DeleteParagraph(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.paragraphRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
+	if err := h.adminSvc.DeleteParagraph(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -213,7 +197,7 @@ func (h *AdminHandler) CreateGrammar(ctx *gin.Context) {
 	}
 
 	grammar := req.ToDomain()
-	if err := h.grammarRepo.Create(ctx.Request.Context(), grammar); err != nil {
+	if err := h.adminSvc.CreateGrammar(ctx.Request.Context(), grammar); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
@@ -239,7 +223,7 @@ func (h *AdminHandler) DeleteGrammar(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.grammarRepo.Delete(ctx.Request.Context(), param.ID); err != nil {
+	if err := h.adminSvc.DeleteGrammar(ctx.Request.Context(), param.ID); err != nil {
 		apperror.Response(ctx, err)
 		return
 	}
