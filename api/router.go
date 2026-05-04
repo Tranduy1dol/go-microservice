@@ -19,6 +19,7 @@ func SetupRouter(
 	testGenSvc *usecase.TestGeneratorService,
 	userSvc *usecase.UserService,
 	adminSvc *usecase.AdminService,
+	srsSvc *usecase.SRSService,
 ) *gin.Engine {
 	r := gin.Default()
 
@@ -54,6 +55,7 @@ func SetupRouter(
 		grammarHandler := handler.NewGrammarHandler(lookupSvc)
 		testHandler := handler.NewTestHandler(testGenSvc)
 		userHandler := handler.NewUserHandler(userSvc)
+		srsHandler := handler.NewSRSHandler(srsSvc)
 
 		v1.GET("/words/:id", wordHandler.GetWord)
 		v1.GET("/words/search", wordHandler.SearchWords)
@@ -66,6 +68,10 @@ func SetupRouter(
 		v1.POST("/tests/:id/submit", testHandler.SubmitTest)
 
 		v1.GET("/users/me", userHandler.GetMe)
+
+		v1.POST("/srs/deck", srsHandler.AddWordToDeck)
+		v1.GET("/srs/due", srsHandler.GetDueCards)
+		v1.POST("/srs/review/:id", srsHandler.ReviewCard)
 
 		admin := v1.Group("/admin")
 		admin.Use(middleware.AdminMiddleware())

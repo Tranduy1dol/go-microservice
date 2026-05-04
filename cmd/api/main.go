@@ -39,6 +39,7 @@ func main() {
 	grammarRepo := mongo.NewGrammarRepository(db)
 	paragraphRepo := mongo.NewParagraphRepository(db)
 	testRepo := mongo.NewTestRepository(db)
+	srsRepo := mongo.NewSRSRepository(db)
 
 	jwtSvc := auth.NewJWTService(cfg.OAuth.JWTSecret)
 	googleOAuthService := auth.NewGoogleOAuthService(cfg.OAuth, jwtSvc, userRepo)
@@ -47,8 +48,9 @@ func main() {
 	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo, testRepo)
 	userSvc := usecase.NewUserService(userRepo)
 	adminSvc := usecase.NewAdminService(wordRepo, questionRepo, paragraphRepo, grammarRepo)
+	srsSvc := usecase.NewSRSService(srsRepo, wordRepo)
 
-	router := api.SetupRouter(cfg.Server.EnableSwagger, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc)
+	router := api.SetupRouter(cfg.Server.EnableSwagger, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc, srsSvc)
 
 	log.Printf("server starting on port %s", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {
