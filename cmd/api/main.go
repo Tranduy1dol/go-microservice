@@ -30,7 +30,7 @@ func main() {
 
 	_, db, err := mongo.NewClient(context.Background(), cfg.MongoDB.URI, cfg.MongoDB.Database)
 	if err != nil {
-		log.Fatalf("failed to connect mongodb")
+		log.Fatalf("failed to connect mongodb: %v", err)
 	}
 
 	wordRepo := mongo.NewWordRepository(db)
@@ -50,7 +50,7 @@ func main() {
 	adminSvc := usecase.NewAdminService(wordRepo, questionRepo, paragraphRepo, grammarRepo)
 	srsSvc := usecase.NewSRSService(srsRepo, wordRepo)
 
-	router := api.SetupRouter(cfg.Server.EnableSwagger, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc, srsSvc)
+	router := api.SetupRouter(cfg.Server.EnableSwagger, cfg.Server.UIBaseURL, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc, srsSvc)
 
 	log.Printf("server starting on port %s", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {

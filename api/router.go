@@ -6,6 +6,7 @@ import (
 	_ "github.com/Tranduy1dol/learning-japanese/docs"
 	"github.com/Tranduy1dol/learning-japanese/internal/auth"
 	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -13,6 +14,7 @@ import (
 
 func SetupRouter(
 	enableSwagger bool,
+	uiBaseURL string,
 	authSvc *auth.GoogleOAuthService,
 	jwtSvc *auth.JWTService,
 	lookupSvc *usecase.LookupService,
@@ -22,6 +24,13 @@ func SetupRouter(
 	srsSvc *usecase.SRSService,
 ) *gin.Engine {
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{uiBaseURL},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	r.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"status": "ok"})
@@ -39,12 +48,12 @@ func SetupRouter(
 		})
 		authGroup.GET("/google/callback", func(ctx *gin.Context) {
 			code := ctx.Query("code")
-			token, user, err := authSvc.HandleCallback(ctx, code)
+			token, _, err := authSvc.HandleCallback(ctx, code)
 			if err != nil {
 				ctx.JSON(400, gin.H{"error": err.Error()})
 				return
 			}
-			ctx.JSON(200, gin.H{"token": token, "user": user})
+			ctx.Redirect(302, uiBaseURL+"?token="+token)
 		})
 	}
 

@@ -18,6 +18,7 @@ type ServerConfig struct {
 	Port          string `mapstructure:"port"`
 	Env           string `mapstructure:"env"`
 	EnableSwagger bool   `mapstructure:"enable_swagger"`
+	UIBaseURL     string `mapstructure:"ui_base_url"`
 }
 
 type MongoConfig struct {
