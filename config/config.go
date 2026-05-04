@@ -59,6 +59,7 @@ func Load() (*Config, error) {
 	viper.SetDefault("server.port", "8080")
 	viper.SetDefault("server.env", "development")
 	viper.SetDefault("server.enable_swagger", false)
+	viper.SetDefault("server.ui_base_url", "http://localhost:3000")
 	viper.SetDefault("mongodb.uri", "mongodb://admin:secret@localhost:27017")
 	viper.SetDefault("mongodb.database", "learning-japanese")
 	viper.SetDefault("redis.addr", "localhost:6379")

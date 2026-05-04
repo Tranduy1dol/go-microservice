@@ -2,6 +2,7 @@ server:
   port: "8080"
   env: development
   enable_swagger: true
+  ui_base_url: http://localhost:5173
 
 mongodb:
   uri: mongodb://admin:secret@localhost:27017
