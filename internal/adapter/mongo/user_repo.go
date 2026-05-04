@@ -24,7 +24,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id string) (*domain.User, 
 	var user domain.User
 	err := r.collection.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 
 	return &user, nil
@@ -36,7 +36,7 @@ func (r *UserRepository) GetByGoogleID(ctx context.Context, googleID string) (*d
 	var user domain.User
 	err := r.collection.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
-		return nil, err
+		return nil, wrapError(err)
 	}
 
 	return &user, nil
@@ -53,6 +53,7 @@ func (r *UserRepository) Upsert(ctx context.Context, googleID, email, name, pict
 			"updated_at":  time.Now(),
 		},
 		"$setOnInsert": bson.M{
+			"_id":        googleID, // Use GoogleID as the _id since it is unique
 			"google_id":  googleID,
 			"role":       "user",
 			"created_at": time.Now(),
