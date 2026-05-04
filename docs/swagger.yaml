@@ -336,6 +336,22 @@ definitions:
           type: string
         type: array
     type: object
+  dto.SubmitTestRequest:
+    properties:
+      answers:
+        additionalProperties:
+          type: integer
+        type: object
+    required:
+    - answers
+    type: object
+  dto.SubmitTestResponse:
+    properties:
+      score:
+        type: integer
+      total:
+        type: integer
+    type: object
   dto.TestPartResponse:
     properties:
       questions:
@@ -728,6 +744,46 @@ paths:
       summary: Get grammar by ID
       tags:
       - grammar
+  /tests/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Test ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Test answers
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SubmitTestRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SubmitTestResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apperror.AppError'
+      security:
+      - BearerAuth: []
+      summary: Submit test answers
+      tags:
+      - tests
   /tests/generate/{level}:
     post:
       parameters:
