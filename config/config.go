@@ -2,8 +2,10 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
@@ -40,6 +42,10 @@ type OAuthConfig struct {
 }
 
 func Load() (*Config, error) {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, relying on system environment variables")
+	}
+
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
