@@ -38,12 +38,13 @@ func main() {
 	questionRepo := mongo.NewQuestionRepository(db)
 	grammarRepo := mongo.NewGrammarRepository(db)
 	paragraphRepo := mongo.NewParagraphRepository(db)
+	testRepo := mongo.NewTestRepository(db)
 
 	jwtSvc := auth.NewJWTService(cfg.OAuth.JWTSecret)
 	googleOAuthService := auth.NewGoogleOAuthService(cfg.OAuth, jwtSvc, userRepo)
 
 	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo)
-	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo)
+	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo, testRepo)
 	userSvc := usecase.NewUserService(userRepo)
 	adminSvc := usecase.NewAdminService(wordRepo, questionRepo, paragraphRepo, grammarRepo)
 

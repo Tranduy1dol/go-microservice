@@ -13,12 +13,14 @@ import (
 type TestGeneratorService struct {
 	questionRepo  port.QuestionRepository
 	paragraphRepo port.ParagraphRepository
+	testRepo      port.TestRepository
 }
 
-func NewTestGeneratorService(question port.QuestionRepository, paragraph port.ParagraphRepository) *TestGeneratorService {
+func NewTestGeneratorService(question port.QuestionRepository, paragraph port.ParagraphRepository, test port.TestRepository) *TestGeneratorService {
 	return &TestGeneratorService{
 		questionRepo:  question,
 		paragraphRepo: paragraph,
+		testRepo:      test,
 	}
 }
 
@@ -61,7 +63,34 @@ func (s *TestGeneratorService) GenerateTest(ctx context.Context, jlptLevel int) 
 		CreatedAt: time.Now(),
 	}
 
+	if err := s.testRepo.Save(ctx, test); err != nil {
+		return nil, err
+	}
+
 	return test, nil
+}
+
+func (s *TestGeneratorService) SubmitTest(ctx context.Context, testID string, userAnswer map[string]int) (int, int, error) {
+	test, err := s.testRepo.GetByID(ctx, testID)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	totalQuestion := 0
+	correctAnswer := 0
+
+	for _, section := range test.Sections {
+		for _, q := range section.Questions {
+			totalQuestion++
+			if userSelected, ok := userAnswer[q.ID]; ok {
+				if userSelected == q.CorrectIndex {
+					correctAnswer++
+				}
+			}
+		}
+	}
+
+	return correctAnswer, totalQuestion, nil
 }
 
 func (s *TestGeneratorService) shuffleQuestions(qs []*domain.Question) {
