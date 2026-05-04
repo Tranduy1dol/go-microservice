@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/Tranduy1dol/learning-japanese/internal/domain"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

@@ -4,11 +4,11 @@ import (
 	"context"
 	"log"
 
-	"github.com/Tranduy1dol/learning-japanese/api"
-	"github.com/Tranduy1dol/learning-japanese/config"
-	"github.com/Tranduy1dol/learning-japanese/internal/adapter/mongo"
-	"github.com/Tranduy1dol/learning-japanese/internal/auth"
-	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
+	"github.com/Tranduy1dol/kotoba-press-core/api"
+	"github.com/Tranduy1dol/kotoba-press-core/config"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/mongo"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/auth"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/usecase"
 )
 
 // @title           Learning Japanese API

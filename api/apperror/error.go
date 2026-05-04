@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Tranduy1dol/learning-japanese/internal/domain"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )

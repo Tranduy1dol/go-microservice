@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/Tranduy1dol/learning-japanese/config"
-	"github.com/Tranduy1dol/learning-japanese/internal/adapter/jmdict"
-	"github.com/Tranduy1dol/learning-japanese/internal/adapter/mongo"
+	"github.com/Tranduy1dol/kotoba-press-core/config"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/jmdict"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/mongo"
 	"github.com/spf13/cobra"
 )
 

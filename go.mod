@@ -1,4 +1,4 @@
-module github.com/Tranduy1dol/learning-japanese
+module github.com/Tranduy1dol/kotoba-press-core
 
 go 1.26.2
 

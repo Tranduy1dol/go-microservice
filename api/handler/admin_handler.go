@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/Tranduy1dol/learning-japanese/api/apperror"
-	"github.com/Tranduy1dol/learning-japanese/api/dto"
-	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
+	"github.com/Tranduy1dol/kotoba-press-core/api/apperror"
+	"github.com/Tranduy1dol/kotoba-press-core/api/dto"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 

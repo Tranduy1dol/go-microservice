@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/Tranduy1dol/learning-japanese/internal/domain"
+import "github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 
 type CreateQuestionRequest struct {
 	Type         string   `json:"type" binding:"required,oneof=multiple_choice fill_in_blank reorder"`

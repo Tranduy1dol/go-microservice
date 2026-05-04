@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Tranduy1dol/learning-japanese/internal/domain"
-	"github.com/Tranduy1dol/learning-japanese/internal/port"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/port"
 )
 
 type TestGeneratorService struct {

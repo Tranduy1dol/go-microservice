@@ -6,9 +6,9 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"github.com/Tranduy1dol/learning-japanese/config"
-	"github.com/Tranduy1dol/learning-japanese/internal/domain"
-	"github.com/Tranduy1dol/learning-japanese/internal/port"
+	"github.com/Tranduy1dol/kotoba-press-core/config"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/port"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )

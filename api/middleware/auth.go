@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Tranduy1dol/learning-japanese/internal/auth"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/auth"
 	"github.com/gin-gonic/gin"
 )
 

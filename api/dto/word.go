@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/Tranduy1dol/learning-japanese/internal/domain"
+import "github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 
 type SearchWordQuery struct {
 	Q     string `form:"q" binding:"required"`

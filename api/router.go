@@ -1,11 +1,11 @@
 package api
 
 import (
-	"github.com/Tranduy1dol/learning-japanese/api/handler"
-	"github.com/Tranduy1dol/learning-japanese/api/middleware"
-	_ "github.com/Tranduy1dol/learning-japanese/docs"
-	"github.com/Tranduy1dol/learning-japanese/internal/auth"
-	"github.com/Tranduy1dol/learning-japanese/internal/usecase"
+	"github.com/Tranduy1dol/kotoba-press-core/api/handler"
+	"github.com/Tranduy1dol/kotoba-press-core/api/middleware"
+	_ "github.com/Tranduy1dol/kotoba-press-core/docs"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/auth"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/usecase"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
