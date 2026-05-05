@@ -58,7 +58,9 @@ func (r *UserRepository) Upsert(ctx context.Context, googleID, email, name, pict
 			"role":       "user",
 			"created_at": time.Now(),
 			"study_progress": domain.Progress{
-				JLPTLevel: 5,
+				JLPTLevel:      5,
+				WeeklyMinutes:  []int{0, 0, 0, 0, 0, 0, 0},
+				RecentActivity: []domain.ActiviyLog{},
 			},
 		},
 	}
