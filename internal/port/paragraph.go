@@ -13,4 +13,6 @@ type ParagraphRepository interface {
 	Create(ctx context.Context, p *domain.Paragraph) error
 	BulkCreate(ctx context.Context, paragraphs []*domain.Paragraph) (int64, error)
 	Delete(ctx context.Context, id string) error
+	List(ctx context.Context, limit, offset int) ([]*domain.Paragraph, int, error)
+	Update(ctx context.Context, id string, paragraph *domain.Paragraph) error
 }

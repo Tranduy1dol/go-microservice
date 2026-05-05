@@ -90,3 +90,41 @@ func (r *ParagraphRepository) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (r *ParagraphRepository) List(ctx context.Context, limit, offset int) ([]*domain.Paragraph, int, error) {
+	filter := bson.M{}
+	total, err := r.collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, 0, wrapError(err)
+	}
+
+	opts := options.Find().SetSkip(int64(offset)).SetLimit(int64(limit)).SetSort(bson.M{"_id": -1})
+	cursor, err := r.collection.Find(ctx, filter, opts)
+	if err != nil {
+		return nil, 0, wrapError(err)
+	}
+	defer func() { _ = cursor.Close(ctx) }()
+
+	var paragraphs []*domain.Paragraph
+	if err := cursor.All(ctx, &paragraphs); err != nil {
+		return nil, 0, wrapError(err)
+	}
+
+	return paragraphs, int(total), nil
+}
+
+func (r *ParagraphRepository) Update(ctx context.Context, id string, paragraph *domain.Paragraph) error {
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": paragraph}
+
+	result, err := r.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return wrapError(err)
+	}
+
+	if result.MatchedCount == 0 {
+		return domain.ErrNotFound
+	}
+
+	return nil
+}

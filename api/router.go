@@ -87,14 +87,26 @@ func SetupRouter(
 		admin.Use(middleware.AdminMiddleware())
 		{
 			adminHandler := handler.NewAdminHandler(adminSvc)
+
 			admin.POST("/words", adminHandler.CreateWord)
 			admin.DELETE("/words/:id", adminHandler.DeleteWord)
+			admin.GET("/words", adminHandler.ListWords)
+			admin.PUT("/words/:id", adminHandler.UpdateWord)
+
 			admin.POST("/questions", adminHandler.CreateQuestion)
 			admin.DELETE("/questions/:id", adminHandler.DeleteQuestion)
+			admin.GET("/questions", adminHandler.ListQuestion)
+			admin.PUT("/questions/:id", adminHandler.UpdateQuestion)
+
 			admin.POST("/paragraphs", adminHandler.CreateParagraph)
 			admin.DELETE("/paragraphs/:id", adminHandler.DeleteParagraph)
+			admin.GET("/paragraphs", adminHandler.ListParagraphs)
+			admin.PUT("/paragraphs/:id", adminHandler.UpdateParagraph)
+
 			admin.POST("/grammars", adminHandler.CreateGrammar)
 			admin.DELETE("/grammars/:id", adminHandler.DeleteGrammar)
+			admin.GET("/grammars", adminHandler.ListGrammars)
+			admin.PUT("/grammars/:id", adminHandler.UpdateGrammar)
 		}
 	}
 

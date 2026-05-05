@@ -72,3 +72,12 @@ func NewParagraphResponse(p *domain.Paragraph) ParagraphResponse {
 		Tags:      p.Tags,
 	}
 }
+
+func NewParagraphListReponse(ps []*domain.Paragraph) []ParagraphResponse {
+	res := make([]ParagraphResponse, len(ps))
+	for i, p := range ps {
+		res[i] = NewParagraphResponse(p)
+	}
+
+	return res
+}

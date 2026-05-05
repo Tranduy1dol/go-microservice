@@ -13,4 +13,6 @@ type GrammarRepository interface {
 	Create(ctx context.Context, g *domain.Grammar) error
 	BulkCreate(ctx context.Context, grammars []*domain.Grammar) (int64, error)
 	Delete(ctx context.Context, id string) error
+	List(ctx context.Context, limit, offset int) ([]*domain.Grammar, int, error)
+	Update(ctx context.Context, id string, grammar *domain.Grammar) error
 }

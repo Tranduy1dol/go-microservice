@@ -16,4 +16,6 @@ type DictionaryRepository interface {
 	Create(ctx context.Context, word *domain.Word) error
 	BulkCreate(ctx context.Context, words []*domain.Word) (int64, error)
 	Delete(ctx context.Context, id string) error
+	List(ctx context.Context, limit, offset int) ([]*domain.Word, int, error)
+	Update(ctx context.Context, id string, word *domain.Word) error
 }

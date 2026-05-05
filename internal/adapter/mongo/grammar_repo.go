@@ -90,3 +90,41 @@ func (r *GrammarRepository) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (r *GrammarRepository) List(ctx context.Context, limit, offset int) ([]*domain.Grammar, int, error) {
+	filter := bson.M{}
+	total, err := r.collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, 0, wrapError(err)
+	}
+
+	opts := options.Find().SetSkip(int64(offset)).SetLimit(int64(limit)).SetSort(bson.M{"_id": -1})
+	cursor, err := r.collection.Find(ctx, filter, opts)
+	if err != nil {
+		return nil, 0, wrapError(err)
+	}
+	defer func() { _ = cursor.Close(ctx) }()
+
+	var grammars []*domain.Grammar
+	if err := cursor.All(ctx, &grammars); err != nil {
+		return nil, 0, wrapError(err)
+	}
+
+	return grammars, int(total), nil
+}
+
+func (r *GrammarRepository) Update(ctx context.Context, id string, grammar *domain.Grammar) error {
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": grammar}
+
+	result, err := r.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return wrapError(err)
+	}
+
+	if result.MatchedCount == 0 {
+		return domain.ErrNotFound
+	}
+
+	return nil
+}

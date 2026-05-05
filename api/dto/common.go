@@ -10,6 +10,26 @@ type PaginationQuery struct {
 	Offset int `form:"offset" binding:"omitempty,min=0"`
 }
 
+type PaginatedResponse[T any] struct {
+	Items  []T `json:"items"`
+	Total  int `json:"total"`
+	Limit  int `json:"limit"`
+	Offset int `json:"offset"`
+}
+
+func NewPaginatedResponse[T any](items []T, total, limit, offset int) PaginatedResponse[T] {
+	if items == nil {
+		items = make([]T, 0)
+	}
+
+	return PaginatedResponse[T]{
+		Items:  items,
+		Total:  total,
+		Limit:  limit,
+		Offset: offset,
+	}
+}
+
 type JLPTLevelParam struct {
 	Level int `uri:"level" binding:"required,min=1,max=5"`
 }

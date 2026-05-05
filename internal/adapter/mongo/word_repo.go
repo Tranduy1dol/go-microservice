@@ -137,3 +137,41 @@ func (r *WordRepository) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (r *WordRepository) List(ctx context.Context, limit, offset int) ([]*domain.Word, int, error) {
+	filter := bson.M{}
+	total, err := r.collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return nil, 0, wrapError(err)
+	}
+
+	opts := options.Find().SetSkip(int64(offset)).SetLimit(int64(limit)).SetSort(bson.M{"_id": -1})
+	cursor, err := r.collection.Find(ctx, filter, opts)
+	if err != nil {
+		return nil, 0, wrapError(err)
+	}
+	defer func() { _ = cursor.Close(ctx) }()
+
+	var words []*domain.Word
+	if err := cursor.All(ctx, &words); err != nil {
+		return nil, 0, wrapError(err)
+	}
+
+	return words, int(total), nil
+}
+
+func (r *WordRepository) Update(ctx context.Context, id string, word *domain.Word) error {
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": word}
+
+	result, err := r.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return wrapError(err)
+	}
+
+	if result.MatchedCount == 0 {
+		return domain.ErrNotFound
+	}
+
+	return nil
+}

@@ -57,3 +57,12 @@ func NewQuestionWithAnswerResponse(q *domain.Question) QuestionWithAnswerRespons
 		Explanation:      q.Explanation,
 	}
 }
+
+func NewQuestionWithAnswerListResponse(qs []*domain.Question) []QuestionWithAnswerResponse {
+	res := make([]QuestionWithAnswerResponse, len(qs))
+	for i, q := range qs {
+		res[i] = NewQuestionWithAnswerResponse(q)
+	}
+
+	return res
+}

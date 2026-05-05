@@ -13,4 +13,6 @@ type QuestionRepository interface {
 	Create(ctx context.Context, q *domain.Question) error
 	BulkCreate(ctx context.Context, questions []*domain.Question) (int64, error)
 	Delete(ctx context.Context, id string) error
+	List(ctx context.Context, limit, offset int) ([]*domain.Question, int, error)
+	Update(ctx context.Context, id string, question *domain.Question) error
 }

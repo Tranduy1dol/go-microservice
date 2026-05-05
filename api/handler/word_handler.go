@@ -78,7 +78,7 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 // @Param       level path int true "JLPT Level (1-5)"
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
-// @Success     200 {object} map[string]interface{}
+// @Success     200 {object} dto.PaginatedResponse[dto.WordResponse]
 // @Failure     400 {object} apperror.AppError
 // @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth
@@ -102,10 +102,7 @@ func (h *WordHandler) BrowseWordsByJLPT(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"words":  dto.NewWordListResponse(words),
-		"total":  total,
-		"limit":  page.Limit,
-		"offset": page.Offset,
-	})
+	res := dto.NewPaginatedResponse(dto.NewWordListResponse(words), total, page.Limit, page.Offset)
+
+	ctx.JSON(http.StatusOK, res)
 }
