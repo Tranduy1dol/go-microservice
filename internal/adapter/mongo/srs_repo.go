@@ -57,3 +57,13 @@ func (r *SRSRepository) GetByWordAndUser(ctx context.Context, wordID, userID str
 	err := r.collection.FindOne(ctx, filter).Decode(&card)
 	return &card, wrapError(err)
 }
+
+func (r *SRSRepository) GetDueCardsCount(ctx context.Context, userID string) (int64, error) {
+	filter := bson.M{
+		"user_id":  userID,
+		"due_date": bson.M{"$lte": time.Now()},
+	}
+
+	count, err := r.collection.CountDocuments(ctx, filter)
+	return count, wrapError(err)
+}

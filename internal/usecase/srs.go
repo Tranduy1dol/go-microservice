@@ -80,3 +80,7 @@ func (s *SRSService) ReviewCard(ctx context.Context, userID, cardID string, qual
 
 	return card, nil
 }
+
+func (s *SRSService) GetDueCardsCount(ctx context.Context, userID string) (int64, error) {
+	return s.srsRepo.GetDueCardsCount(ctx, userID)
+}

@@ -81,6 +81,7 @@ func SetupRouter(
 		v1.POST("/srs/deck", srsHandler.AddWordToDeck)
 		v1.GET("/srs/due", srsHandler.GetDueCards)
 		v1.POST("/srs/review/:id", srsHandler.ReviewCard)
+		v1.GET("/srs/due/count", srsHandler.GetDueCardsCount)
 
 		admin := v1.Group("/admin")
 		admin.Use(middleware.AdminMiddleware())

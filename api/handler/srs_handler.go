@@ -122,3 +122,27 @@ func (h *SRSHandler) ReviewCard(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, dto.NewSRSCardResponse(card))
 }
+
+// GetDueCardsCount godoc
+// @Summary     Get count of due flashcards
+// @Tags        srs
+// @Produce     json
+// @Success     200 {object} map[string]int64
+// @Failure     500 {object} apperror.AppError
+// @Security    BearerAuth
+// @Router      /srs/due/count [get]
+func (h *SRSHandler) GetDueCardsCount(ctx *gin.Context) {
+	userID, err := dto.UserIDFromContext(ctx)
+	if err != nil {
+		apperror.Response(ctx, err)
+		return
+	}
+
+	count, err := h.srsSvc.GetDueCardsCount(ctx.Request.Context(), userID)
+	if err != nil {
+		apperror.Response(ctx, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"count": count})
+}
