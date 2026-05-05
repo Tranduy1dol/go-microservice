@@ -78,7 +78,7 @@ func (h *WordHandler) SearchWords(ctx *gin.Context) {
 // @Param       level path int true "JLPT Level (1-5)"
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
-// @Success     200 {object} dto.PaginatedResponse[dto.WordResponse]
+// @Success     200 {object} dto.SwaggerPaginatedWords
 // @Failure     400 {object} apperror.AppError
 // @Failure     500 {object} apperror.AppError
 // @Security    BearerAuth

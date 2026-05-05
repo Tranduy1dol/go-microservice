@@ -78,7 +78,7 @@ func (h *AdminHandler) DeleteWord(ctx *gin.Context) {
 // @Produce     json
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
-// @Success     200 {object} dto.PaginatedResponse[dto.WordResponse]
+// @Success     200 {object} dto.SwaggerPaginatedWords
 // @Security    BearerAuth
 // @Router      /admin/words [get]
 func (h *AdminHandler) ListWords(ctx *gin.Context) {
@@ -139,7 +139,7 @@ func (h *AdminHandler) UpdateWord(ctx *gin.Context) {
 // @Produce     json
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
-// @Success     200 {object} dto.PaginatedResponse[dto.GrammarResponse]
+// @Success     200 {object} dto.SwaggerPaginatedGrammars
 // @Security    BearerAuth
 // @Router      /admin/grammars [get]
 func (h *AdminHandler) ListGrammars(ctx *gin.Context) {
@@ -200,7 +200,7 @@ func (h *AdminHandler) UpdateGrammar(ctx *gin.Context) {
 // @Produce     json
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
-// @Success     200 {object} dto.PaginatedResponse[dto.ParagraphResponse]
+// @Success     200 {object} dto.SwaggerPaginatedParagraphs
 // @Security    BearerAuth
 // @Router      /admin/paragraphs [get]
 func (h *AdminHandler) ListParagraphs(ctx *gin.Context) {
@@ -261,7 +261,7 @@ func (h *AdminHandler) UpdateParagraph(ctx *gin.Context) {
 // @Produce     json
 // @Param       limit query int false "Limit" default(50)
 // @Param       offset query int false "Offset" default(0)
-// @Success     200 {object} dto.PaginatedResponse[dto.QuestionWithAnswerResponse]
+// @Success     200 {object} dto.SwaggerPaginatedQuestions
 // @Security    BearerAuth
 // @Router      /admin/questions [get]
 func (h *AdminHandler) ListQuestion(ctx *gin.Context) {
