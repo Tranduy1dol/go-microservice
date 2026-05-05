@@ -3,6 +3,7 @@ package apperror
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
@@ -62,7 +63,8 @@ func FromDomainError(err error) *AppError {
 }
 
 func FromValidationError(err error) *AppError {
-	if ve, ok := errors.AsType[validator.ValidationErrors](err); ok {
+	var ve validator.ValidationErrors
+	if errors.As(err, &ve) {
 		fields := make([]string, len(ve))
 		for i, fe := range ve {
 			fields[i] = fmt.Sprintf("%s: failed on '%s'", fe.Field(), fe.Tag())
@@ -79,6 +81,21 @@ func FromValidationError(err error) *AppError {
 }
 
 func Response(ctx *gin.Context, err error) {
-	appErr := FromDomainError(err)
+	var appErr *AppError
+
+	if errors.As(err, &appErr) {
+		if appErr.Code >= 500 {
+			log.Printf("[ERROR] %s %s | Handled AppError: %s\n", ctx.Request.Method, ctx.Request.URL.Path, err.Error())
+		}
+		ctx.JSON(appErr.Code, appErr)
+		return
+	}
+
+	appErr = FromDomainError(err)
+
+	if appErr.Code == 500 {
+		log.Printf("[ERROR] %s %s | RAW INTERNAL ERROR: %v\n", ctx.Request.Method, ctx.Request.URL.Path, err)
+	}
+
 	ctx.JSON(appErr.Code, appErr)
 }
