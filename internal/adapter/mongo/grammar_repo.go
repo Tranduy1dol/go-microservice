@@ -115,7 +115,15 @@ func (r *GrammarRepository) List(ctx context.Context, limit, offset int) ([]*dom
 
 func (r *GrammarRepository) Update(ctx context.Context, id string, grammar *domain.Grammar) error {
 	filter := bson.M{"_id": id}
-	update := bson.M{"$set": grammar}
+	update := bson.M{"$set": bson.M{
+		"pattern":   grammar.Pattern,
+		"meaning":   grammar.Meaning,
+		"formation": grammar.Formation,
+		"jlpt":      grammar.JLPT,
+		"examples":  grammar.Example,
+		"notes":     grammar.Notes,
+		"source":    grammar.Source,
+	}}
 
 	result, err := r.collection.UpdateOne(ctx, filter, update)
 	if err != nil {

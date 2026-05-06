@@ -115,7 +115,14 @@ func (r *ParagraphRepository) List(ctx context.Context, limit, offset int) ([]*d
 
 func (r *ParagraphRepository) Update(ctx context.Context, id string, paragraph *domain.Paragraph) error {
 	filter := bson.M{"_id": id}
-	update := bson.M{"$set": paragraph}
+	update := bson.M{"$set": bson.M{
+		"title":     paragraph.Title,
+		"content":   paragraph.Content,
+		"jlpt":      paragraph.JLPT,
+		"questions": paragraph.Questions,
+		"tags":      paragraph.Tags,
+		"source":    paragraph.Source,
+	}}
 
 	result, err := r.collection.UpdateOne(ctx, filter, update)
 	if err != nil {

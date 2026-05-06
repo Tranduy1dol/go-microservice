@@ -120,7 +120,17 @@ func (r *QuestionRepository) List(ctx context.Context, limit, offset int) ([]*do
 
 func (r *QuestionRepository) Update(ctx context.Context, id string, question *domain.Question) error {
 	filter := bson.M{"_id": id}
-	update := bson.M{"$set": question}
+	update := bson.M{"$set": bson.M{
+		"type":          question.Type,
+		"section":       question.Section,
+		"jlpt":          question.JLPT,
+		"prompt":        question.Prompt,
+		"choices":       question.Choices,
+		"correct_index": question.CorrectIndex,
+		"explanation":   question.Explanation,
+		"tags":          question.Tags,
+		"source":        question.Source,
+	}}
 
 	result, err := r.collection.UpdateOne(ctx, filter, update)
 	if err != nil {
