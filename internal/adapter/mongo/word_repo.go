@@ -162,7 +162,12 @@ func (r *WordRepository) List(ctx context.Context, limit, offset int) ([]*domain
 
 func (r *WordRepository) Update(ctx context.Context, id string, word *domain.Word) error {
 	filter := bson.M{"_id": id}
-	update := bson.M{"$set": word}
+	update := bson.M{"$set": bson.M{
+		"kanji":    word.Kanji,
+		"readings": word.Readings,
+		"senses":   word.Senses,
+		"jlpt":     word.JLPT,
+	}}
 
 	result, err := r.collection.UpdateOne(ctx, filter, update)
 	if err != nil {
