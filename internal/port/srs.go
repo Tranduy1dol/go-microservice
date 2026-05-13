@@ -12,4 +12,5 @@ type SRSRepository interface {
 	GetByIDAndUser(ctx context.Context, id, userID string) (*domain.SRSCard, error)
 	GetByWordAndUser(ctx context.Context, wordID, userID string) (*domain.SRSCard, error)
 	GetDueCardsCount(ctx context.Context, userID string) (int64, error)
+	GetUserWordIDs(ctx context.Context, userID string) ([]string, error)
 }

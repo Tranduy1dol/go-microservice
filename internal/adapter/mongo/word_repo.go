@@ -180,3 +180,29 @@ func (r *WordRepository) Update(ctx context.Context, id string, word *domain.Wor
 
 	return nil
 }
+
+func (r *WordRepository) GetNewWords(ctx context.Context, excludeIDs []string, level, limit int) ([]*domain.Word, error) {
+	filter := bson.M{}
+
+	if len(excludeIDs) > 0 {
+		filter["_id"] = bson.M{"$nin": excludeIDs}
+	}
+
+	if level > 0 {
+		filter["jlpt"] = level
+	}
+
+	opts := options.Find().SetLimit(int64(limit))
+	cursor, err := r.collection.Find(ctx, filter, opts)
+	if err != nil {
+		return nil, wrapError(err)
+	}
+	defer func() { _ = cursor.Close(ctx) }()
+
+	var words []*domain.Word
+	if err := cursor.All(ctx, &words); err != nil {
+		return nil, wrapError(err)
+	}
+
+	return words, nil
+}

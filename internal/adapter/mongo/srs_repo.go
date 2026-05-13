@@ -67,3 +67,26 @@ func (r *SRSRepository) GetDueCardsCount(ctx context.Context, userID string) (in
 	count, err := r.collection.CountDocuments(ctx, filter)
 	return count, wrapError(err)
 }
+
+func (r *SRSRepository) GetUserWordIDs(ctx context.Context, userID string) ([]string, error) {
+	filter := bson.M{"user_id": userID}
+	cursor, err := r.collection.Find(ctx, filter, options.Find().SetProjection(bson.M{"word_id": 1}))
+	if err != nil {
+		return nil, wrapError(err)
+	}
+	defer func() { _ = cursor.Close(ctx) }()
+
+	var results []struct {
+		WordID string `bson:"word_id"`
+	}
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, wrapError(err)
+	}
+
+	ids := make([]string, len(results))
+	for i, r := range results {
+		ids[i] = r.WordID
+	}
+
+	return ids, nil
+}

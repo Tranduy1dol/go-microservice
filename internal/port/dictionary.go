@@ -18,4 +18,5 @@ type DictionaryRepository interface {
 	Delete(ctx context.Context, id string) error
 	List(ctx context.Context, limit, offset int) ([]*domain.Word, int, error)
 	Update(ctx context.Context, id string, word *domain.Word) error
+	GetNewWords(ctx context.Context, excludeIDs []string, level, limit int) ([]*domain.Word, error)
 }

@@ -146,3 +146,42 @@ func (h *SRSHandler) GetDueCardsCount(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"count": count})
 }
+
+// GetNewWords godoc
+// @Summary     Get words not yet in user's SRS deck
+// @Tags        srs
+// @Produce     json
+// @Param       level path int true "JLPT Level (1-5)"
+// @Param       limit query int false "Limit" default(20)
+// @Success     200 {array} dto.WordResponse
+// @Failure     400 {object} apperror.AppError
+// @Failure     500 {object} apperror.AppError
+// @Security    BearerAuth
+// @Router      /srs/new/{level} [get]
+func (h *SRSHandler) GetNewWords(ctx *gin.Context) {
+	userID, err := dto.UserIDFromContext(ctx)
+	if err != nil {
+		apperror.Response(ctx, err)
+		return
+	}
+
+	var param dto.JLPTLevelParam
+	if err := ctx.ShouldBindUri(&param); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	var page dto.PaginationQuery
+	if err := ctx.ShouldBindQuery(&page); err != nil {
+		apperror.Response(ctx, apperror.FromValidationError(err))
+		return
+	}
+
+	words, err := h.srsSvc.GetNewWords(ctx, userID, param.Level, page.Limit)
+	if err != nil {
+		apperror.Response(ctx, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, dto.NewWordListResponse(words))
+}

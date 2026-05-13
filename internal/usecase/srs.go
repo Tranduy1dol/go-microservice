@@ -84,3 +84,12 @@ func (s *SRSService) ReviewCard(ctx context.Context, userID, cardID string, qual
 func (s *SRSService) GetDueCardsCount(ctx context.Context, userID string) (int64, error) {
 	return s.srsRepo.GetDueCardsCount(ctx, userID)
 }
+
+func (s *SRSService) GetNewWords(ctx context.Context, userID string, level, limit int) ([]*domain.Word, error) {
+	existingIDs, err := s.srsRepo.GetUserWordIDs(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.wordRepo.GetNewWords(ctx, existingIDs, level, limit)
+}
