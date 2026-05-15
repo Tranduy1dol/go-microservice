@@ -518,7 +518,6 @@ definitions:
           $ref: '#/definitions/dto.SenseResponse'
         type: array
     type: object
-host: learning-japanese.onrender.com
 info:
   contact: {}
   description: A Japanese learning application API

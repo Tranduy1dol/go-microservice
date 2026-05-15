@@ -6,7 +6,6 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "learning-japanese.onrender.com",
     "basePath": "/api/v1",
     "paths": {
         "/admin/grammars": {
