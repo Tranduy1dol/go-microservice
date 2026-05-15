@@ -2,13 +2,15 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
+	"os"
 
 	"github.com/Tranduy1dol/kotoba-press-core/api"
 	"github.com/Tranduy1dol/kotoba-press-core/config"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/grpc"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/mongo"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/auth"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/logger"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/usecase"
 )
 
@@ -16,7 +18,6 @@ import (
 // @version         1.0
 // @description     A Japanese learning application API
 
-// @host            learning-japanese.onrender.com
 // @BasePath        /api/v1
 
 // @securityDefinitions.apikey BearerAuth
@@ -26,19 +27,23 @@ import (
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatalf("failed to load config")
+		slog.Error("failed to load config", "error", err)
+		os.Exit(1)
 	}
+
+	logger.Init(cfg.Server.Env, cfg.Server.LogLevel)
 
 	_, db, err := mongo.NewClient(context.Background(), cfg.MongoDB.URI, cfg.MongoDB.Database)
 	if err != nil {
-		log.Fatalf("failed to connect mongodb: %v", err)
+		slog.Error("failed to connect mongodb", "error", err)
+		os.Exit(1)
 	}
 
 	var searchClient *grpc.SearchClient
 	if cfg.GRPC.SearchEngineAddr != "" {
 		sc, err := grpc.NewSearchClient(cfg.GRPC.SearchEngineAddr)
 		if err != nil {
-			log.Printf("[WARN] could not connect to search engine: %v", err)
+			slog.Warn("could not connect to search engine", "error", err)
 		} else {
 			searchClient = sc
 			defer func() { _ = searchClient.Close() }()
@@ -64,8 +69,9 @@ func main() {
 
 	router := api.SetupRouter(cfg.Server.EnableSwagger, cfg.Server.UIBaseURL, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc, srsSvc)
 
-	log.Printf("server starting on port %s", cfg.Server.Port)
+	slog.Info("server starting", "port", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {
-		log.Fatalf("failed to start server: %v", err)
+		slog.Error("failed to start server", "error", err)
+		os.Exit(1)
 	}
 }

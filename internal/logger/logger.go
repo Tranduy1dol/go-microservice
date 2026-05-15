@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"os"
+	"strings"
 )
 
 const (
@@ -18,12 +19,24 @@ const (
 
 var root *slog.Logger
 
-func Init(env string) {
+func Init(env string, level string) {
 	var handler slog.Handler
+
+	var slogLevel slog.Level
+	switch strings.ToLower(level) {
+	case "debug":
+		slogLevel = slog.LevelDebug
+	case "warn":
+		slogLevel = slog.LevelWarn
+	case "error":
+		slogLevel = slog.LevelError
+	default:
+		slogLevel = slog.LevelInfo
+	}
 
 	if env == "production" {
 		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-			Level: slog.LevelInfo,
+			Level: slogLevel,
 			ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
 				switch a.Key {
 				case slog.MessageKey:
@@ -39,7 +52,7 @@ func Init(env string) {
 		})
 	} else {
 		handler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-			Level: slog.LevelDebug,
+			Level: slogLevel,
 		})
 	}
 
@@ -49,7 +62,7 @@ func Init(env string) {
 
 func New(component string) *slog.Logger {
 	if root == nil {
-		Init("development")
+		Init("development", "debug")
 	}
 
 	return root.With("component", component)

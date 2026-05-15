@@ -2,12 +2,14 @@ package usecase
 
 import (
 	"context"
-	"log"
 
 	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/grpc"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/logger"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/port"
 )
+
+var lookupLog = logger.New(logger.ComponentUsecase + ".lookup")
 
 type LookupService struct {
 	dictRepo     port.DictionaryRepository
@@ -44,7 +46,7 @@ func (s *LookupService) SearchWord(ctx context.Context, query string, limit int)
 			}
 		}
 
-		log.Printf("[WARN] groc search failed: %v", err)
+		lookupLog.Warn("grpc search failed, falling back to mongodb", "error", err)
 	}
 
 	if limit <= 0 || limit > 20 {

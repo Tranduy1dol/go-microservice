@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -20,6 +19,7 @@ type Config struct {
 type ServerConfig struct {
 	Port          string `mapstructure:"port"`
 	Env           string `mapstructure:"env"`
+	LogLevel      string `mapstructure:"log_level"`
 	EnableSwagger bool   `mapstructure:"enable_swagger"`
 	UIBaseURL     string `mapstructure:"ui_base_url"`
 }
@@ -48,14 +48,14 @@ type GRPCConfig struct {
 
 func Load() (*Config, error) {
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, relying on system environment variables")
+		fmt.Println("No .env file found, relying on system environment variables")
 	}
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("./config")
-	viper.AddConfigPath("$HOME/.config/.learning-japanese")
+	viper.AddConfigPath("$HOME/.config/.kotoba-press")
 
 	viper.SetEnvPrefix("APP")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "__"))
@@ -63,6 +63,7 @@ func Load() (*Config, error) {
 
 	viper.SetDefault("server.port", "8080")
 	viper.SetDefault("server.env", "development")
+	viper.SetDefault("server.log_level", "info")
 	viper.SetDefault("server.enable_swagger", false)
 	viper.SetDefault("server.ui_base_url", "http://localhost:3000")
 	viper.SetDefault("mongodb.uri", "mongodb://admin:secret@localhost:27017")

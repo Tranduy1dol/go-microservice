@@ -3,8 +3,9 @@ package apperror
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strings"
+
+	"github.com/Tranduy1dol/kotoba-press-core/internal/logger"
 
 	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 	"github.com/gin-gonic/gin"
@@ -85,7 +86,11 @@ func Response(ctx *gin.Context, err error) {
 
 	if errors.As(err, &appErr) {
 		if appErr.Code >= 500 {
-			log.Printf("[ERROR] %s %s | Handled AppError: %s\n", ctx.Request.Method, ctx.Request.URL.Path, err.Error())
+			logger.WithContext(ctx, logger.ComponentHandler).Error("handled internal server error",
+				"method", ctx.Request.Method,
+				"path", ctx.Request.URL.Path,
+				"error", appErr.Message,
+			)
 		}
 		ctx.JSON(appErr.Code, appErr)
 		return
@@ -94,7 +99,11 @@ func Response(ctx *gin.Context, err error) {
 	appErr = FromDomainError(err)
 
 	if appErr.Code == 500 {
-		log.Printf("[ERROR] %s %s | RAW INTERNAL ERROR: %v\n", ctx.Request.Method, ctx.Request.URL.Path, err)
+		logger.WithContext(ctx, logger.ComponentHandler).Error("internal server error",
+			"method", ctx.Request.Method,
+			"path", ctx.Request.URL.Path,
+			"error", err,
+		)
 	}
 
 	ctx.JSON(appErr.Code, appErr)

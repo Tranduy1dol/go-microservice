@@ -2,13 +2,15 @@ package usecase
 
 import (
 	"context"
-	"log"
 
 	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/grpc"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/logger"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/port"
 	searchpb "github.com/Tranduy1dol/kotoba-press-core/proto/grpc_service/v1"
 )
+
+var adminLog = logger.New(logger.ComponentUsecase + ".admin")
 
 type AdminService struct {
 	wordRepo      port.DictionaryRepository
@@ -71,7 +73,7 @@ func (s *AdminService) IndexWord(ctx context.Context, word *domain.Word) {
 			word.JLPT,
 		)
 		if err != nil {
-			log.Printf("[WARN] failed to index word %s: %v", word.ID, err)
+			adminLog.Warn("failed to index word", "word_id", word.ID, "error", err)
 		}
 	}()
 }
