@@ -14,6 +14,7 @@ type Config struct {
 	MongoDB MongoConfig
 	Redis   RedisConfig
 	OAuth   OAuthConfig
+	GRPC    GRPCConfig
 }
 
 type ServerConfig struct {
@@ -41,6 +42,10 @@ type OAuthConfig struct {
 	JWTSecret          string `mapstructure:"jwt_secret"`
 }
 
+type GRPCConfig struct {
+	SearchEngineAddr string `mapstructure:"search_engine_addr"`
+}
+
 func Load() (*Config, error) {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, relying on system environment variables")
@@ -64,6 +69,7 @@ func Load() (*Config, error) {
 	viper.SetDefault("mongodb.database", "learning-japanese")
 	viper.SetDefault("redis.addr", "localhost:6379")
 	viper.SetDefault("redis.db", "0")
+	viper.SetDefault("grpc.search_engine_addr", "")
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/Tranduy1dol/kotoba-press-core/api"
 	"github.com/Tranduy1dol/kotoba-press-core/config"
+	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/grpc"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/mongo"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/auth"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/usecase"
@@ -33,6 +34,17 @@ func main() {
 		log.Fatalf("failed to connect mongodb: %v", err)
 	}
 
+	var searchClient *grpc.SearchClient
+	if cfg.GRPC.SearchEngineAddr != "" {
+		sc, err := grpc.NewSearchClient(cfg.GRPC.SearchEngineAddr)
+		if err != nil {
+			log.Printf("[WARN] could not connect to search engine: %v", err)
+		} else {
+			searchClient = sc
+			defer func() { _ = searchClient.Close() }()
+		}
+	}
+
 	wordRepo := mongo.NewWordRepository(db)
 	userRepo := mongo.NewUserRepository(db)
 	questionRepo := mongo.NewQuestionRepository(db)
@@ -44,10 +56,10 @@ func main() {
 	jwtSvc := auth.NewJWTService(cfg.OAuth.JWTSecret)
 	googleOAuthService := auth.NewGoogleOAuthService(cfg.OAuth, jwtSvc, userRepo)
 
-	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo)
+	lookupSvc := usecase.NewLookupService(wordRepo, grammarRepo, searchClient)
 	testGenSvc := usecase.NewTestGeneratorService(questionRepo, paragraphRepo, testRepo)
 	userSvc := usecase.NewUserService(userRepo)
-	adminSvc := usecase.NewAdminService(wordRepo, questionRepo, paragraphRepo, grammarRepo)
+	adminSvc := usecase.NewAdminService(wordRepo, questionRepo, paragraphRepo, grammarRepo, searchClient)
 	srsSvc := usecase.NewSRSService(srsRepo, wordRepo)
 
 	router := api.SetupRouter(cfg.Server.EnableSwagger, cfg.Server.UIBaseURL, googleOAuthService, jwtSvc, lookupSvc, testGenSvc, userSvc, adminSvc, srsSvc)

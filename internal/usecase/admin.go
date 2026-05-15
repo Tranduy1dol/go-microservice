@@ -2,9 +2,12 @@ package usecase
 
 import (
 	"context"
+	"log"
 
+	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/grpc"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/port"
+	searchpb "github.com/Tranduy1dol/kotoba-press-core/proto/grpc_service/v1"
 )
 
 type AdminService struct {
@@ -12,19 +15,26 @@ type AdminService struct {
 	questionRepo  port.QuestionRepository
 	paragraphRepo port.ParagraphRepository
 	grammarRepo   port.GrammarRepository
+	searchClient  *grpc.SearchClient
 }
 
-func NewAdminService(wordRepo port.DictionaryRepository, questionRepo port.QuestionRepository, paragraphRepo port.ParagraphRepository, grammarRepo port.GrammarRepository) *AdminService {
+func NewAdminService(wordRepo port.DictionaryRepository, questionRepo port.QuestionRepository, paragraphRepo port.ParagraphRepository, grammarRepo port.GrammarRepository, searchClient *grpc.SearchClient) *AdminService {
 	return &AdminService{
 		wordRepo:      wordRepo,
 		questionRepo:  questionRepo,
 		paragraphRepo: paragraphRepo,
 		grammarRepo:   grammarRepo,
+		searchClient:  searchClient,
 	}
 }
 
 func (s *AdminService) CreateWord(ctx context.Context, word *domain.Word) error {
-	return s.wordRepo.Create(ctx, word)
+	if err := s.wordRepo.Create(ctx, word); err != nil {
+		return err
+	}
+
+	s.IndexWord(ctx, word)
+	return nil
 }
 
 func (s *AdminService) DeleteWord(ctx context.Context, id string) error {
@@ -37,7 +47,33 @@ func (s *AdminService) ListWords(ctx context.Context, limit, offset int) ([]*dom
 
 func (s *AdminService) UpdateWord(ctx context.Context, id string, word *domain.Word) error {
 	word.ID = id
-	return s.wordRepo.Update(ctx, id, word)
+	if err := s.wordRepo.Update(ctx, id, word); err != nil {
+		return err
+	}
+
+	s.IndexWord(ctx, word)
+	return nil
+}
+
+func (s *AdminService) IndexWord(ctx context.Context, word *domain.Word) {
+	if s.searchClient == nil {
+		return
+	}
+
+	title, text := word.SearchText()
+	go func() {
+		err := s.searchClient.IndexDocument(
+			context.Background(),
+			word.ID,
+			title,
+			text,
+			searchpb.ContentType_CONTENT_TYPE_WORD,
+			word.JLPT,
+		)
+		if err != nil {
+			log.Printf("[WARN] failed to index word %s: %v", word.ID, err)
+		}
+	}()
 }
 
 func (s *AdminService) ListGrammars(ctx context.Context, limit, offset int) ([]*domain.Grammar, int, error) {

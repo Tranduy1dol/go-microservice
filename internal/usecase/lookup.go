@@ -2,20 +2,24 @@ package usecase
 
 import (
 	"context"
+	"log"
 
+	"github.com/Tranduy1dol/kotoba-press-core/internal/adapter/grpc"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/domain"
 	"github.com/Tranduy1dol/kotoba-press-core/internal/port"
 )
 
 type LookupService struct {
-	dictRepo    port.DictionaryRepository
-	grammarRepo port.GrammarRepository
+	dictRepo     port.DictionaryRepository
+	grammarRepo  port.GrammarRepository
+	searchClient *grpc.SearchClient
 }
 
-func NewLookupService(dict port.DictionaryRepository, grammar port.GrammarRepository) *LookupService {
+func NewLookupService(dict port.DictionaryRepository, grammar port.GrammarRepository, searchClient *grpc.SearchClient) *LookupService {
 	return &LookupService{
-		dictRepo:    dict,
-		grammarRepo: grammar,
+		dictRepo:     dict,
+		grammarRepo:  grammar,
+		searchClient: searchClient,
 	}
 }
 
@@ -24,6 +28,25 @@ func (s *LookupService) GetWord(ctx context.Context, id string) (*domain.Word, e
 }
 
 func (s *LookupService) SearchWord(ctx context.Context, query string, limit int) ([]*domain.Word, error) {
+	if s.searchClient != nil {
+		resp, err := s.searchClient.Search(ctx, query, limit)
+		if err == nil && len(resp.Hits) > 0 {
+			words := make([]*domain.Word, 0, len(resp.Hits))
+			for _, hit := range resp.Hits {
+				word, err := s.dictRepo.GetByID(ctx, hit.DocId)
+				if err == nil {
+					words = append(words, word)
+				}
+			}
+
+			if len(words) > 0 {
+				return words, nil
+			}
+		}
+
+		log.Printf("[WARN] groc search failed: %v", err)
+	}
+
 	if limit <= 0 || limit > 20 {
 		limit = 20
 	}
